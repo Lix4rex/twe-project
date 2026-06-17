@@ -15,9 +15,9 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 
 <div id="formLogin">
 <form action="controleur.php" method="GET">
-Login : <input type="text" name="login" /><br />
-Passe : <input type="password" name="passe" /><br />
-<input type="submit" name="action" value="Connexion" />
+Login : <input type="text" name="username" /><br />
+Passe : <input type="password" name="password" /><br />
+<input type="submit" name="action" value="login" />
 </form>
 </div>
 

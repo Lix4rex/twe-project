@@ -21,6 +21,9 @@ include_once "modele.php";	// Car on utilise la fonction connecterUtilisateur()
  */
 function verifUser($login,$password)
 {
+	$login = proteger($login);
+	$password = proteger($password);
+
 	if (!$login) return false;
 	if (!$password) return false;
 	
@@ -29,7 +32,6 @@ function verifUser($login,$password)
 		$_SESSION["pseudo"] = $login;
 		$_SESSION["idUser"] = $idUser;
 		$_SESSION["heureConnexion"] = date("H:i:s");;
-		$_SESSION["isAdmin"] = isAdmin($idUser);
 		return true;
 	}
 	return false;

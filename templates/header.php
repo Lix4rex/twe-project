@@ -19,8 +19,10 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 <!-- **** H E A D **** -->
 <head>	
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
-	<title>CHAT TWE 2026</title>
+	<title>TWE - MOOD</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/conversations.css">
+	<link rel="stylesheet" type="text/css" href="css/profile.css">
 </head>
 <!-- **** F I N **** H E A D **** -->
 
@@ -40,8 +42,12 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion 
 if (!valider("connecte","SESSION"))
 	echo "<a href=\"index.php?view=login\">Se connecter</a>";
+else {
+	echo "<a href=\"index.php?view=conversations\">Conversations</a>";
+	echo "<a href=\"index.php?view=profile\">Profile</a>";
+}
 ?>
 
-<h1 id="stitre">Messagerie instantannée 2026</h1>
+<h1 id="stitre">MOOD - GAME</h1>
 
 </div>

@@ -16,7 +16,7 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 if (valider("connecte","SESSION"))
 {
 	echo "Utilisateur <b>$_SESSION[pseudo]</b> connecté depuis <b>$_SESSION[heureConnexion]</b> &nbsp; "; 
-	echo "<a href=\"controleur.php?action=Logout\">Se Déconnecter</a>";
+	echo "<a href=\"controleur.php?action=logout\">Se Déconnecter</a>";
 }
 ?>
 </div>
