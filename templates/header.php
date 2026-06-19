@@ -6,7 +6,7 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 	header("Location:../index.php");
 	die("");
 }
-
+//test changement
 // On envoie l'entête Content-type correcte avec le bon charset
 header('Content-Type: text/html;charset=utf-8');
 
