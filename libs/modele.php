@@ -103,4 +103,21 @@ function getPreviousEmotions($id_user, $date){
 	return parcoursRs(SQLSelect($SQL));
 }
 
+function getLeaderboard($id_group){
+
+	$id_group = proteger($id_group);
+
+	$SQL = "
+		select users.username,
+			   group_members.points
+		from group_members
+		join users
+			on users.id = group_members.user_id
+		where group_members.group_id='$id_group'
+		order by group_members.points desc
+	";
+
+	return parcoursRs(SQLSelect($SQL));
+}
+
 ?>
