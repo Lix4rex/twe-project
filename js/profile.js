@@ -21,6 +21,21 @@ const emotions = [
     "colère",
 ];
 
+function chargerLeaderboard(idGroup){  //ce que j'ai ajouté la, a verifier
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+			document.getElementById("leaderboard").innerHTML =
+				xhr.responseText;
+		}
+	};
+
+	xhr.open("GET", "ajax_leaderboard.php?groupe=" + idGroup, true);
+	xhr.send();
+}
+
 function setDayEmotion(emotion){
     $.ajax({
         type: "GET",
