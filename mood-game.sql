@@ -51,6 +51,7 @@ CREATE TABLE `group_members` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
+  `points` int(11) NOT NULL, // j'ai modifié ici
   `joined_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
