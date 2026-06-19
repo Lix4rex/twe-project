@@ -64,6 +64,29 @@ INSERT INTO `group_members` (`id`, `user_id`, `group_id`, `joined_at`) VALUES
 (2, 2, 1, '2026-06-15 13:10:00'),
 (3, 3, 1, '2026-06-15 13:10:00');
 
+  -- --------------------------------------------------------
+
+--
+-- Structure de la table `friends`
+--
+
+CREATE TABLE `friends` (
+  `user_id` int(11) NOT NULL,
+  `friend_id` int(11) NOT NULL,
+  `status` ENUM('en attente', 'accepté', 'rejeté') NOT NULL DEFAULT 'en attente'
+  `joined_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `friends`
+--
+
+INSERT INTO `friends` (`user_id`, `friend_id`,`status`, `joined_at`) VALUES
+(1, 2, en attente, '2026-06-15 13:10:00'),
+(2, 3, accepté, '2026-06-15 13:10:00'),
+(3, 4, rejeté, '2026-06-15 13:10:00');
+
+
 -- --------------------------------------------------------
 
 --
