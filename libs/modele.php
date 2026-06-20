@@ -102,6 +102,66 @@ function getPreviousEmotions($id_user, $date){
  	$SQL = "select * from real_emotions where user_id='$id_user' and date_emotion<='$date' order by date_emotion desc limit 7;";
 	return parcoursRs(SQLSelect($SQL));
 }
+//-------------- gestion d'amis et leaderboard -----------------------------------------
+function getPendingFriendRequests($id_user){
+	$id_user = proteger($id_user);
+
+	$SQL = "
+		SELECT *
+		FROM friends
+		WHERE friend_user_id='$id_user'
+		AND status='pending'
+	";
+
+	return parcoursRs(SQLSelect($SQL));
+}
+
+function acceptFriendRequest($user_id, $friend_user_id){
+
+	$user_id = proteger($user_id);
+	$friend_user_id = proteger($friend_user_id);
+
+	$SQL = "
+		UPDATE friends
+		SET status='accepted'
+		WHERE user_id='$user_id'
+		AND friend_user_id='$friend_user_id'
+	";
+
+	return SQLUpdate($SQL);
+}
+
+function rejectFriendRequest($user_id, $friend_user_id){
+
+	$user_id = proteger($user_id);
+	$friend_user_id = proteger($friend_user_id);
+
+	$SQL = "
+		DELETE FROM friends
+		WHERE user_id='$user_id'
+		AND friend_user_id='$friend_user_id'
+	";
+
+	return SQLDelete($SQL);
+}
+
+function getFriends($id_user){
+
+	$id_user = proteger($id_user);
+
+	$SQL = "
+		SELECT *
+		FROM friends
+		WHERE
+		(
+			user_id='$id_user'
+			OR friend_user_id='$id_user'
+		)
+		AND status='accepted'
+	";
+
+	return parcoursRs(SQLSelect($SQL));
+}
 
 function getLeaderboard($id_group){
 
