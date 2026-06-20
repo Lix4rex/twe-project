@@ -163,6 +163,20 @@ function getFriends($id_user){
 	return parcoursRs(SQLSelect($SQL));
 }
 
+function searchUsers($username){
+
+	$username = proteger($username);
+
+	$SQL = "
+		SELECT *
+		FROM users
+		WHERE username LIKE '$username%'
+		LIMIT 10
+	";
+
+	return parcoursRs(SQLSelect($SQL));
+}
+
 function getLeaderboard($id_group){
 
 	$id_group = proteger($id_group);
