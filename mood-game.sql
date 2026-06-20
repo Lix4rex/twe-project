@@ -73,7 +73,7 @@ INSERT INTO `group_members` (`id`, `user_id`, `group_id`, `joined_at`) VALUES
 CREATE TABLE `friends` (
   `user_id` int(11) NOT NULL,
   `friend_id` int(11) NOT NULL,
-  `status` ENUM('en attente', 'accepté', 'rejeté') NOT NULL DEFAULT 'en attente'
+  `status` ENUM('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending'
   `joined_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -82,9 +82,9 @@ CREATE TABLE `friends` (
 --
 
 INSERT INTO `friends` (`user_id`, `friend_id`,`status`, `joined_at`) VALUES
-(1, 2, en attente, '2026-06-15 13:10:00'),
-(2, 3, accepté, '2026-06-15 13:10:00'),
-(3, 4, rejeté, '2026-06-15 13:10:00');
+(1, 2, pending, '2026-06-15 13:10:00'),
+(2, 3, accepted, '2026-06-15 13:10:00'),
+(3, 4, rejected, '2026-06-15 13:10:00');
 
 
 -- --------------------------------------------------------
