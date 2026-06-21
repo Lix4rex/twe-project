@@ -65,6 +65,42 @@ document.getElementById("rechercheUser").addEventListener("keyup", function(){
 	xhr.send();
 });
 
+
+function rechercherUtilisateur(){
+
+	let texte = document.getElementById("rechercheUser").value;
+
+	if(texte.length < 3){
+
+		document.getElementById(
+			"resultatsRecherche"
+		).innerHTML = "";
+
+		return;
+	}
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.onreadystatechange = function(){
+
+		if(xhr.readyState == 4 && xhr.status == 200){
+
+			document.getElementById(
+				"resultatsRecherche"
+			).innerHTML = xhr.responseText;
+		}
+	};
+
+	xhr.open(
+		"GET",
+		"ajax_recherche_user.php?search="
+		+ encodeURIComponent(texte),
+		true
+	);
+
+	xhr.send();
+}
+
 //-------------------------------------------------------------
 
 function setDayEmotion(emotion){
