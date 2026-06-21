@@ -20,6 +20,8 @@ const emotions = [
     "fatigué",
     "colère",
 ];
+
+var utilisateurSelectionne = 0;
 //-----------------------amis----------------------------------
 function chargerLeaderboard(idGroup){  //ce que j'ai ajouté la, a verifier
 
@@ -99,6 +101,35 @@ function rechercherUtilisateur(){
 	);
 
 	xhr.send();
+}
+
+
+function selectionnerUtilisateur(id, username){
+
+	utilisateurSelectionne = id;
+
+	document.getElementById(
+		"rechercheUser"
+	).value = username;
+
+	document.getElementById(
+		"resultatsRecherche"
+	).innerHTML = "";
+
+	document.getElementById(
+		"btnAjouter"
+	).style.display = "inline";
+}
+
+function ajouterAmi(){
+
+	if(utilisateurSelectionne == 0){
+		return;
+	}
+
+	window.location =
+		"index.php?view=Amis&addFriend="
+		+ utilisateurSelectionne;
 }
 
 //-------------------------------------------------------------
