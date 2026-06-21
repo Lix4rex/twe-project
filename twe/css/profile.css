@@ -1,0 +1,47 @@
+#profile {
+    width: 20%;
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+#personal-feeling {
+    width: 80%;
+    border: 1px solid black;
+    margin: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.emotions-user {
+    display: inline;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.emotion-cb-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    user-select: none;
+    background: #f9f9f9;
+}
+
+.emotion-cb-user:hover {
+    background: #f0f0f0;
+    border-color: #999;
+}
+
+.emotion-cb-user p {
+    margin: 0;
+    font-size: 14px;
+    text-transform: capitalize;
+}
