@@ -6,7 +6,7 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 	header("Location:../index.php");
 	die("");
 }
-//test changement
+
 // On envoie l'entête Content-type correcte avec le bon charset
 header('Content-Type: text/html;charset=utf-8');
 
@@ -45,7 +45,10 @@ if (!valider("connecte","SESSION"))
 else {
 	echo "<a href=\"index.php?view=conversations\">Conversations</a>";
 	echo "<a href=\"index.php?view=profile\">Profile</a>";
+    echo "<a href=\"index.php?view=leaderboard\">Leaderboard</a>";
+    echo "<a href=\"index.php?view=amis\">Amis</a>";
 }
+
 ?>
 
 <h1 id="stitre">MOOD - GAME</h1>
