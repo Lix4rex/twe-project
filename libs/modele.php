@@ -163,14 +163,18 @@ function getFriends($id_user){
 	return parcoursRs(SQLSelect($SQL));
 }
 
-function searchUsers($username){
+
+function searchUsers($username, $id_user){
 
 	$username = proteger($username);
+	$id_user = proteger($id_user);
 
 	$SQL = "
 		SELECT *
 		FROM users
 		WHERE username LIKE '$username%'
+		AND id != '$id_user'
+		ORDER BY username
 		LIMIT 10
 	";
 
