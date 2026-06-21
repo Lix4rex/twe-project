@@ -20,7 +20,7 @@ const emotions = [
     "fatigué",
     "colère",
 ];
-
+//-----------------------amis----------------------------------
 function chargerLeaderboard(idGroup){  //ce que j'ai ajouté la, a verifier
 
 	var xhr = new XMLHttpRequest();
@@ -35,6 +35,37 @@ function chargerLeaderboard(idGroup){  //ce que j'ai ajouté la, a verifier
 	xhr.open("GET", "ajax_leaderboard.php?groupe=" + idGroup, true);
 	xhr.send();
 }
+
+document.getElementById("rechercheUser").addEventListener("keyup", function(){
+
+	let texte = this.value;
+
+	if(texte.length < 3){
+		document.getElementById("resultatsRecherche").innerHTML = "";
+		return;
+	}
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.onreadystatechange = function(){
+
+		if(xhr.readyState == 4 && xhr.status == 200){
+
+			document.getElementById("resultatsRecherche").innerHTML =
+				xhr.responseText;
+		}
+	};
+
+	xhr.open(
+		"GET",
+		"ajax_recherche_user.php?search="+encodeURIComponent(texte),
+		true
+	);
+
+	xhr.send();
+});
+
+//-------------------------------------------------------------
 
 function setDayEmotion(emotion){
     $.ajax({
