@@ -21,5 +21,7 @@ Passe : <input type="password" name="password" /><br />
 </form>
 </div>
 
+<p>Pas encore de compte ? <a href="index.php?view=register">Créer un compte</a></p>
+
 
 </div>

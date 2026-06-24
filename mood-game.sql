@@ -44,6 +44,23 @@ INSERT INTO `groups` (`id`, `name`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `friends`
+-- Gère les demandes d'ami et les relations d'amitié
+-- status : 'pending' (en attente), 'accepted' (acceptée)
+-- user_id = celui qui a envoyé la demande, friend_id = celui qui la reçoit
+--
+
+CREATE TABLE `friends` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `friend_id` int(11) NOT NULL,
+  `status` enum('pending','accepted') NOT NULL DEFAULT 'pending',
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `group_members`
 --
 
@@ -100,7 +117,7 @@ CREATE TABLE `paris` (
   `user_id` int(11) NOT NULL,
   `friend_user_id` int(11) NOT NULL,
   `emotion` varchar(255) NOT NULL,
-  `date_pari` date NOT NULL DEFAULT curdate()
+  `date_pari` date NOT NULL DEFAULT (curdate())
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -125,7 +142,7 @@ CREATE TABLE `real_emotions` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `emotion` varchar(50) NOT NULL,
-  `date_emotion` date NOT NULL DEFAULT curdate()
+  `date_emotion` date NOT NULL DEFAULT (curdate())
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -180,6 +197,14 @@ ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `friends`
+--
+ALTER TABLE `friends`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`,`friend_id`),
+  ADD KEY `friend_id` (`friend_id`);
+
+--
 -- Index pour la table `group_members`
 --
 ALTER TABLE `group_members`
@@ -228,6 +253,12 @@ ALTER TABLE `groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT pour la table `friends`
+--
+ALTER TABLE `friends`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+--
 -- AUTO_INCREMENT pour la table `group_members`
 --
 ALTER TABLE `group_members`
@@ -260,6 +291,13 @@ ALTER TABLE `users`
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `friends`
+--
+ALTER TABLE `friends`
+  ADD CONSTRAINT `friends_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `friends_ibfk_2` FOREIGN KEY (`friend_id`) REFERENCES `users` (`id`);
 
 --
 -- Contraintes pour la table `group_members`

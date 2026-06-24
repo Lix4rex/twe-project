@@ -254,7 +254,8 @@ function display_betting_panel(friend_id_user, username, firstname, lastname){
 }
 
 function display_groups(){
-    const groups_div = $("#groups");
+    const groups_div = $("#groups-list");
+    groups_div.empty();
 
     $.ajax({
         type: "GET",
@@ -428,6 +429,74 @@ async function display_conversation(id_group){
 $(document).on("click", ".group", function () {
     var id_group = $(this).data("id");
     display_conversation(id_group);
+});
+
+function display_friends_checklist(){
+    var checklistDiv = $("#friends-checklist");
+    checklistDiv.empty();
+
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {"action": "get_friends"},
+        dataType: "json",
+        success: function(oRep){
+            oRep.forEach(function(friend){
+                checklistDiv.append(
+                    $("<label>")
+                        .addClass("friend-checkbox")
+                        .append($("<input type='checkbox'>").val(friend.id))
+                        .append($("<span>").html(friend.username))
+                );
+            });
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        },
+    });
+}
+
+function createGroup(name, friend_ids){
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {"action": "create_group", "group_name": name, "friend_ids": friend_ids.join(",")},
+        dataType: "json",
+        success: function(oRep){
+            if (oRep.success){
+                $("#new-group-name").val("");
+                $("#create-group-form input[type='checkbox']").prop("checked", false);
+                $("#create-group-form").hide();
+                $("#create-group-message").html("");
+                display_groups();
+            } else {
+                $("#create-group-message").html(oRep.error);
+            }
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        },
+    });
+}
+
+$(document).on("click", "#show-create-group-btn", function(){
+    $("#create-group-form").toggle();
+    display_friends_checklist();
+});
+
+$(document).on("click", "#confirm-create-group-btn", function(){
+    var name = $("#new-group-name").val();
+    if (!name){
+        $("#create-group-message").html("Il faut donner un nom au groupe");
+        return;
+    }
+
+    var friend_ids = [];
+    $("#friends-checklist input[type='checkbox']:checked").each(function(){
+        friend_ids.push($(this).val());
+    });
+
+    createGroup(name, friend_ids);
 });
 
 $(document).ready(function(){

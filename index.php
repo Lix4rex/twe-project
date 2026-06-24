@@ -36,6 +36,10 @@ Les formulaires de toutes les vues générées enverront leurs données vers la 
 			include("templates/login.php");
 		break; 
 
+		case "register" : 
+			include("templates/register.php");
+		break; 
+
 		case "conversations" :
 			include("templates/conversations.php");
 		break;

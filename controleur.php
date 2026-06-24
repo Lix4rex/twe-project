@@ -40,6 +40,27 @@ session_start();
 				}
 			break;
 
+			case 'register' :
+				$first_name = valider("first_name");
+				$last_name  = valider("last_name");
+				$username   = valider("username");
+				$password   = valider("password");
+
+				if ($first_name && $last_name && $username && $password)
+				{
+					if (!creerUser($first_name, $last_name, $username, $password)){
+						// Echec (username déjà pris ou champ invalide) :
+						// on revient sur le formulaire avec un message d'erreur
+						$_SESSION["erreurInscription"] = "Ce nom d'utilisateur est déjà pris ou les informations sont invalides.";
+						$qs = "?view=register";
+					}
+				}
+				else {
+					$_SESSION["erreurInscription"] = "Tous les champs sont obligatoires.";
+					$qs = "?view=register";
+				}
+			break;
+
 			case 'logout':
 				session_unset();
 				$_SESSION["connecte"] = false;
@@ -201,6 +222,102 @@ session_start();
 					ob_clean();
 					header("Content-Type: application/json");
 					echo json_encode($emotions);
+					exit;
+				}
+			break;
+
+			case 'send_friend_request':
+				$id_user = $_SESSION["idUser"];
+				if ($friend_username = valider("friend_username", "GET")){
+					$result = sendFriendRequest($id_user, $friend_username);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($result);
+					exit;
+				}
+			break;
+
+			case 'accept_friend_request':
+				$id_user = $_SESSION["idUser"];
+				if ($id_friendship = valider("id_friendship", "GET")){
+					$ok = acceptFriendRequest($id_user, $id_friendship);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode(["success" => $ok !== false]);
+					exit;
+				}
+			break;
+
+			case 'reject_friend_request':
+				$id_user = $_SESSION["idUser"];
+				if ($id_friendship = valider("id_friendship", "GET")){
+					$ok = rejectFriendRequest($id_user, $id_friendship);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode(["success" => $ok !== false]);
+					exit;
+				}
+			break;
+
+			case 'remove_friend':
+				$id_user = $_SESSION["idUser"];
+				if ($friend_id_user = valider("friend_id_user", "GET")){
+					$ok = removeFriend($id_user, $friend_id_user);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode(["success" => $ok !== false]);
+					exit;
+				}
+			break;
+
+			case 'get_friends':
+				$id_user = $_SESSION["idUser"];
+				$friends = getFriends($id_user);
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($friends);
+				exit;
+			break;
+
+			case 'get_pending_friend_requests':
+				$id_user = $_SESSION["idUser"];
+				$requests = getPendingFriendRequests($id_user);
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($requests);
+				exit;
+			break;
+
+			case 'get_sent_friend_requests':
+				$id_user = $_SESSION["idUser"];
+				$requests = getSentFriendRequests($id_user);
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($requests);
+				exit;
+			break;
+
+			case 'create_group':
+				$id_user = $_SESSION["idUser"];
+				if ($group_name = valider("group_name", "GET")){
+					$friend_ids = valider("friend_ids", "GET");
+					$friend_ids = $friend_ids ? explode(",", $friend_ids) : [];
+					$result = createGroup($group_name, $id_user, $friend_ids);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($result);
+					exit;
+				}
+			break;
+
+			case 'add_friend_to_group':
+				$id_user = $_SESSION["idUser"];
+				if ($id_group = valider("id_group", "GET"))
+				if ($friend_id_user = valider("friend_id_user", "GET")){
+					$result = addFriendToGroup($id_user, $id_group, $friend_id_user);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($result);
 					exit;
 				}
 			break;

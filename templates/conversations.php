@@ -29,6 +29,16 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 
 <div id="main_box">
 	<div id="groups">
+		<div id="groups-list">
+		</div>
+		<input type="submit" id="show-create-group-btn" value="+ Créer un groupe" />
+		<div id="create-group-form" style="display:none;">
+			<input type="text" id="new-group-name" placeholder="Nom du groupe" />
+			<div id="friends-checklist">
+			</div>
+			<input type="submit" id="confirm-create-group-btn" value="Créer" />
+			<p id="create-group-message"></p>
+		</div>
 	</div>
 
 	<div id="conversation">

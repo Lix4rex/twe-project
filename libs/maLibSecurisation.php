@@ -39,6 +39,43 @@ function verifUser($login,$password)
 }
 
 
+/**
+ * Cette fonction crée un nouvel utilisateur en base, puis le connecte directement
+ * (mêmes variables de session que verifUser).
+ * @pre tous les champs doivent être non vides
+ * @param string $first_name
+ * @param string $last_name
+ * @param string $login
+ * @param string $password
+ * @return false si le username est déjà pris ou en cas d'erreur, true sinon
+ */
+function creerUser($first_name, $last_name, $login, $password)
+{
+	$first_name = proteger($first_name);
+	$last_name  = proteger($last_name);
+	$login      = proteger($login);
+	$password   = proteger($password);
+
+	if (!$first_name) return false;
+	if (!$last_name)  return false;
+	if (!$login)      return false;
+	if (!$password)   return false;
+
+	// Le username doit être unique
+	if (usernameExisteBdd($login)) return false;
+
+	if ($idUser = creerUserBdd($first_name, $last_name, $login, $password)){
+		// On connecte directement le nouvel utilisateur
+		$_SESSION["connecte"] = "true";
+		$_SESSION["pseudo"] = $login;
+		$_SESSION["idUser"] = $idUser;
+		$_SESSION["heureConnexion"] = date("H:i:s");
+		return true;
+	}
+	return false;
+}
+
+
 
 
 /**

@@ -23,6 +23,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/conversations.css">
 	<link rel="stylesheet" type="text/css" href="css/profile.css">
+	<link rel="stylesheet" type="text/css" href="css/friends.css">
 </head>
 <!-- **** F I N **** H E A D **** -->
 
@@ -40,10 +41,13 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 
 <?php
 // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion 
-if (!valider("connecte","SESSION"))
+if (!valider("connecte","SESSION")) {
 	echo "<a href=\"index.php?view=login\">Se connecter</a>";
+	echo "<a href=\"index.php?view=register\">Créer un compte</a>";
+}
 else {
 	echo "<a href=\"index.php?view=conversations\">Conversations</a>";
+	echo "<a href=\"index.php?view=friends\">Amis</a>";
 	echo "<a href=\"index.php?view=profile\">Profile</a>";
 }
 ?>
