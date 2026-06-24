@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1deb1+deb12u1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:3306
--- Généré le : mer. 17 juin 2026 à 13:11
--- Version du serveur : 10.11.14-MariaDB-0+deb12u2
--- Version de PHP : 8.2.31
+-- Hôte : 127.0.0.1:3306
+-- Généré le : mer. 24 juin 2026 à 11:50
+-- Version du serveur : 8.4.7
+-- Version de PHP : 8.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,14 +24,43 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `friends`
+--
+
+DROP TABLE IF EXISTS `friends`;
+CREATE TABLE IF NOT EXISTS `friends` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `friend_id` int NOT NULL,
+  `status` enum('pending','accepted') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`friend_id`),
+  KEY `friend_id` (`friend_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `friends`
+--
+
+INSERT INTO `friends` (`id`, `user_id`, `friend_id`, `status`, `created_at`) VALUES
+(2, 2, 4, 'accepted', '2026-06-21 16:17:50'),
+(3, 2, 3, 'accepted', '2026-06-21 16:47:21'),
+(4, 6, 2, 'pending', '2026-06-24 13:49:15');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `groups`
 --
 
-CREATE TABLE `groups` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE IF NOT EXISTS `groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `groups`
@@ -39,24 +68,9 @@ CREATE TABLE `groups` (
 
 INSERT INTO `groups` (`id`, `name`, `created_at`) VALUES
 (1, 'FOOTBALL', '2026-06-15 13:09:13'),
-(2, 'RUGBY', '2026-06-15 13:16:50');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `friends`
--- Gère les demandes d'ami et les relations d'amitié
--- status : 'pending' (en attente), 'accepted' (acceptée)
--- user_id = celui qui a envoyé la demande, friend_id = celui qui la reçoit
---
-
-CREATE TABLE `friends` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `friend_id` int(11) NOT NULL,
-  `status` enum('pending','accepted') NOT NULL DEFAULT 'pending',
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(2, 'RUGBY', '2026-06-15 13:16:50'),
+(3, 'ugfghzv', '2026-06-21 16:31:08'),
+(4, 'vgvjghvhgv', '2026-06-21 16:48:13');
 
 -- --------------------------------------------------------
 
@@ -64,12 +78,16 @@ CREATE TABLE `friends` (
 -- Structure de la table `group_members`
 --
 
-CREATE TABLE `group_members` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  `joined_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `group_members`;
+CREATE TABLE IF NOT EXISTS `group_members` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL,
+  `joined_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`group_id`),
+  KEY `group_id` (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `group_members`
@@ -78,7 +96,12 @@ CREATE TABLE `group_members` (
 INSERT INTO `group_members` (`id`, `user_id`, `group_id`, `joined_at`) VALUES
 (1, 1, 1, '2026-06-15 13:10:00'),
 (2, 2, 1, '2026-06-15 13:10:00'),
-(3, 3, 1, '2026-06-15 13:10:00');
+(3, 3, 1, '2026-06-15 13:10:00'),
+(4, 2, 3, '2026-06-21 16:31:08'),
+(5, 3, 3, '2026-06-21 16:31:08'),
+(6, 4, 3, '2026-06-21 16:31:09'),
+(7, 3, 4, '2026-06-21 16:48:13'),
+(8, 2, 4, '2026-06-21 16:48:13');
 
 -- --------------------------------------------------------
 
@@ -86,13 +109,17 @@ INSERT INTO `group_members` (`id`, `user_id`, `group_id`, `joined_at`) VALUES
 -- Structure de la table `messages`
 --
 
-CREATE TABLE `messages` (
-  `id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `content` text NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `group_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `content` text COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `group_id` (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `messages`
@@ -104,7 +131,9 @@ INSERT INTO `messages` (`id`, `group_id`, `user_id`, `content`, `created_at`) VA
 (3, 1, 3, 'On sort ce soir ?', '2026-06-15 13:11:31'),
 (15, 1, 2, 'je suis le goat', '2026-06-16 13:49:25'),
 (16, 1, 2, 'bonjour !!!!', '2026-06-17 01:19:33'),
-(17, 1, 1, 'FRANCE 3 - SENEGAL 1 !!!!', '2026-06-17 13:01:35');
+(17, 1, 1, 'FRANCE 3 - SENEGAL 1 !!!!', '2026-06-17 13:01:35'),
+(18, 3, 2, 'hello\n', '2026-06-21 16:31:14'),
+(19, 4, 3, 'hcyyrftcfcghjc', '2026-06-21 16:48:24');
 
 -- --------------------------------------------------------
 
@@ -112,13 +141,17 @@ INSERT INTO `messages` (`id`, `group_id`, `user_id`, `content`, `created_at`) VA
 -- Structure de la table `paris`
 --
 
-CREATE TABLE `paris` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `friend_user_id` int(11) NOT NULL,
-  `emotion` varchar(255) NOT NULL,
-  `date_pari` date NOT NULL DEFAULT (curdate())
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `paris`;
+CREATE TABLE IF NOT EXISTS `paris` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `friend_user_id` int NOT NULL,
+  `emotion` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `date_pari` date NOT NULL DEFAULT (curdate()),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `friend_user_id` (`friend_user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `paris`
@@ -138,12 +171,15 @@ INSERT INTO `paris` (`id`, `user_id`, `friend_user_id`, `emotion`, `date_pari`) 
 -- Structure de la table `real_emotions`
 --
 
-CREATE TABLE `real_emotions` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `emotion` varchar(50) NOT NULL,
-  `date_emotion` date NOT NULL DEFAULT (curdate())
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `real_emotions`;
+CREATE TABLE IF NOT EXISTS `real_emotions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `emotion` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `date_emotion` date NOT NULL DEFAULT (curdate()),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `real_emotions`
@@ -159,7 +195,8 @@ INSERT INTO `real_emotions` (`id`, `user_id`, `emotion`, `date_emotion`) VALUES
 (9, 1, 'fatigué', '2026-06-11'),
 (10, 1, 'triste', '2026-06-10'),
 (11, 1, 'triste', '2026-06-09'),
-(12, 1, 'triste', '2026-06-08');
+(12, 1, 'triste', '2026-06-08'),
+(13, 2, 'heureux', '2026-06-21');
 
 -- --------------------------------------------------------
 
@@ -167,14 +204,17 @@ INSERT INTO `real_emotions` (`id`, `user_id`, `emotion`, `date_emotion`) VALUES
 -- Structure de la table `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `first_name` varchar(80) NOT NULL,
-  `last_name` varchar(80) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(80) COLLATE utf8mb4_general_ci NOT NULL,
+  `last_name` varchar(80) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `users`
@@ -184,109 +224,9 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `username`, `password`, `c
 (1, 'Axel', 'PARIS', 'Lix4rex', 'test', '2026-06-15 13:08:26'),
 (2, 'Lionel', 'Messi', 'GOAT', 'test', '2026-06-15 13:08:26'),
 (3, 'Khvicha', 'Kvaratskhelia', 'Kvara', 'test', '2026-06-15 13:08:26'),
-(4, 'John', 'Doe', 'johndoe', 'test', '2026-06-15 13:10:35');
-
---
--- Index pour les tables déchargées
---
-
---
--- Index pour la table `groups`
---
-ALTER TABLE `groups`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `friends`
---
-ALTER TABLE `friends`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`,`friend_id`),
-  ADD KEY `friend_id` (`friend_id`);
-
---
--- Index pour la table `group_members`
---
-ALTER TABLE `group_members`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`,`group_id`),
-  ADD KEY `group_id` (`group_id`);
-
---
--- Index pour la table `messages`
---
-ALTER TABLE `messages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `group_id` (`group_id`);
-
---
--- Index pour la table `paris`
---
-ALTER TABLE `paris`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `friend_user_id` (`friend_user_id`);
-
---
--- Index pour la table `real_emotions`
---
-ALTER TABLE `real_emotions`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Index pour la table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
--- AUTO_INCREMENT pour les tables déchargées
---
-
---
--- AUTO_INCREMENT pour la table `groups`
---
-ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT pour la table `friends`
---
-ALTER TABLE `friends`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- AUTO_INCREMENT pour la table `group_members`
---
-ALTER TABLE `group_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT pour la table `messages`
---
-ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- AUTO_INCREMENT pour la table `paris`
---
-ALTER TABLE `paris`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
-
---
--- AUTO_INCREMENT pour la table `real_emotions`
---
-ALTER TABLE `real_emotions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT pour la table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+(4, 'John', 'Doe', 'johndoe', 'test', '2026-06-15 13:10:35'),
+(5, 'ismail', 'jpuad', 'ISMAITHEGOAT', 'test', '2026-06-24 12:14:38'),
+(6, 'odijnazoi', 'iudhziu', 'axellegoaaattt', 'test', '2026-06-24 13:39:48');
 
 --
 -- Contraintes pour les tables déchargées
