@@ -506,6 +506,11 @@ function display_calendar(monday = currentMonday) {
         },	
     });
 }
+$(document).on("click", "#delete-account-btn", function(){
+    if (confirm("Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible.")){
+        window.location = "controleur.php?action=delete_account";
+    }
+});
 
 $(document).ready(function(){
     display_profile();

@@ -25,6 +25,8 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 	<link rel="stylesheet" type="text/css" href="css/profile.css">
 	<link rel="stylesheet" type="text/css" href="css/friends.css">
 	<link rel="stylesheet" type="text/css" href="css/calendars.css">
+	<link rel="stylesheet" type="text/css" href="css/friends.css">
+	<link rel="stylesheet" type="text/css" href="css/weather.css">
 </head>
 <!-- **** F I N **** H E A D **** -->
 
@@ -39,6 +41,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 </div>
 
 <a href="index.php?view=accueil">Accueil</a>
+<a href="index.php?view=weather">Météo</a>
 
 <?php
 // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion 

@@ -20,7 +20,10 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 // rien ici ! 
 </script>
 
-<script src="js/conversations.js">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+</script>
+
+<script src="js/conversations.js?v=7">
 </script>
 
 <div id="corps">

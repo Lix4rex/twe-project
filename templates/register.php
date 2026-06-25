@@ -26,8 +26,8 @@ if (isset($_SESSION["erreurInscription"]))
 <form action="controleur.php" method="GET">
 Prénom : <input type="text" name="first_name" /><br />
 Nom : <input type="text" name="last_name" /><br />
-Username : <input type="text" name="username" /><br />
-Mot de passe : <input type="password" name="password" /><br />
+Login : <input type="text" name="username" /><br />
+Passe : <input type="password" name="password" /><br />
 <input type="submit" name="action" value="register" />
 </form>
 </div>

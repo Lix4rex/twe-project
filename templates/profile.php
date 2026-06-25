@@ -45,3 +45,7 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
     <div id="calendar">
     </div>
 </div>
+
+<div id="danger-zone">
+    <input type="submit" id="delete-account-btn" value="Supprimer mon compte" />
+</div>

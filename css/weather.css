@@ -1,0 +1,138 @@
+/* ===== ONGLET MÉTÉO ===== */
+
+#weather-box {
+    border: 1px solid black;
+    margin: 10px;
+    padding: 15px;
+    max-width: 640px;
+}
+
+#weather-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+#weather-city-input {
+    padding: 6px;
+    flex: 1 1 auto;
+    min-width: 160px;
+}
+
+#weather-search-btn {
+    cursor: pointer;
+    padding: 6px 12px;
+}
+#weather-message {
+    margin: 8px 0;
+}
+#weather-message.error {
+    color: #c0392b;
+}
+#weather-message.success {
+    color: green;
+}
+
+.weather-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.weather-header .weather-icon {
+    width: 90px;
+    height: 90px;
+}
+.weather-header h2 {
+    margin: 0;
+}
+.weather-header .weather-desc {
+    margin: 2px 0;
+    text-transform: capitalize;
+    color: #555;
+}
+.weather-header .weather-temp-big {
+    margin: 2px 0;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.weather-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+.weather-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+}
+.weather-table .weather-label {
+    font-weight: 600;
+    width: 45%;
+    color: #333;
+}
+.weather-table .weather-value {
+    color: #111;
+}
+
+/* ===== SUGGESTIONS DE VILLES ===== */
+#weather-suggestions {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 220px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+    max-width: 100%;
+}
+#weather-suggestions:empty {
+    display: none;
+}
+#weather-suggestions .suggestion-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+#weather-suggestions .suggestion-item:last-child {
+    border-bottom: none;
+}
+#weather-suggestions .suggestion-item:hover {
+    background-color: #f0efe8;
+}
+
+/* ===== HISTORIQUE MÉTÉO ===== */
+#weather-history {
+    margin-top: 18px;
+}
+#weather-history h3 {
+    margin-bottom: 6px;
+    color: #23527c;
+}
+.weather-history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.weather-history-table th,
+.weather-history-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+.weather-history-table th {
+    background-color: #f0efe8;
+    font-weight: 600;
+}
+.weather-history-note {
+    color: #777;
+    font-style: italic;
+}
+
+/* ===== GRAPHIQUES MÉTÉO ===== */
+.weather-chart {
+    position: relative;
+    height: 260px;
+    width: 100%;
+    margin-bottom: 18px;
+}
