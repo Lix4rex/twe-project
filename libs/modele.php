@@ -115,7 +115,7 @@ function setEmotion($id_user, $emotion){
 
 function getBetOnUser($id_user){
 	$id_user = proteger($id_user);
-	$SQL = "select * from paris where friend_user_id='$id_user';";
+	$SQL = "select * from paris where user_id='$id_user';";
 	return parcoursRs(SQLSelect($SQL));
 }
 

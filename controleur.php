@@ -239,6 +239,7 @@ session_start();
 
 			case 'get_day_emotion':
 				$id_user = $_SESSION["idUser"];
+				if ($test = valider("id_user", "GET")) $id_user = $test;
 				$date = date("Y-m-d");
 				if ($test = valider("date_bet", "GET")) $date = $test;
 				if ($id_user){

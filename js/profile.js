@@ -242,19 +242,17 @@ function majPointsBets() {
         data: {action: "get_bet_on_user"},
         dataType: "json",
         success: function(bets) {
-            console.log(bets);
-            console.log("---------");
             let promesses = bets.map(bet => {
                 return $.ajax({
                     type: "GET",
                     url: "controleur.php",
                     data: {
                         action: "get_day_emotion",
-                        date_bet: bet.date_pari
+                        date_bet: bet.date_pari,
+                        id_user: bet.friend_user_id
                     },
                     dataType: "json"
                 }).then(function(oRep) {
-                    console.log(oRep);
                     if (oRep.length) {
                         let emotion = oRep[0];
 
@@ -271,7 +269,6 @@ function majPointsBets() {
             });
 
             Promise.all(promesses).then(function() {
-                console.log(points);
 
                 for (const [id_user, nbPoints] of Object.entries(points)){
                     $.ajax({
