@@ -5,19 +5,22 @@
 
 
 // Si la page est appelée directement par son adresse, on redirige en passant pas la page index
-if (basename($_SERVER["PHP_SELF"]) == "Amis.php")
+if (basename($_SERVER["PHP_SELF"]) == "amis.php")
 {
 	header("Location:../index.php?view=Amis");
 	die("");
 }
-
+include_once "libs/maLibUtils.php";
+	include_once "libs/maLibSQL.pdo.php";
+	include_once "libs/maLibSecurisation.php"; 
+	include_once "libs/modele.php"; 
 // Traitement des actions
 
 if(isset($_GET["accept"]) && is_numeric($_GET["accept"]))
 {
 	acceptFriendRequest(
-		$_GET["accept"],
-		$_SESSION["id"]
+		$_SESSION["idUser"],
+		$_GET["accept"]
 	);
 
 	header("Location:index.php?view=Amis");
@@ -27,8 +30,8 @@ if(isset($_GET["accept"]) && is_numeric($_GET["accept"]))
 if(isset($_GET["reject"]) && is_numeric($_GET["reject"]))
 {
 	rejectFriendRequest(
-		$_GET["reject"],
-		$_SESSION["id"]
+		$_SESSION["idUser"],
+		$_GET["reject"]
 	);
 
 	header("Location:index.php?view=Amis");
@@ -39,7 +42,7 @@ if(isset($_GET["addFriend"])
 	&& is_numeric($_GET["addFriend"]))
 {
 	addFriendRequest(
-		$_SESSION["id"],
+		$_SESSION["idUser"],
 		$_GET["addFriend"]
 	);
 
@@ -47,12 +50,17 @@ if(isset($_GET["addFriend"])
 	exit();
 }
 //ca c'est pour l'apparition des noms quand on veut rechercher 
-$search = $_GET["search"];
 
-$users = searchUsers(
-	$search,
-	$_SESSION["id"]
-);
+$search = "";
+$users = array();
+
+if(isset($_GET["search"]) && strlen($_GET["search"]) >= 3)
+{
+	$users = searchUsers(
+		$_GET["search"],
+		$_SESSION["idUser"]
+	);
+}
 
 foreach($users as $user)
 {
@@ -72,7 +80,7 @@ foreach($users as $user)
 
 echo "<h2>Demandes d'amis</h2>";
 
-$demandes = getPendingFriendRequests($_SESSION["id"]);
+$demandes = getPendingFriendRequests($_SESSION["idUser"]);
 
 if(count($demandes) == 0)
 {
@@ -101,13 +109,13 @@ else
 
 echo "<h2>Mes amis</h2>";
 
-$friends = getFriends($_SESSION["id"]);
+$friends = getFriends($_SESSION["idUser"]);
 
 foreach($friends as $friend)
 {
-	if($friend["user_id"] == $_SESSION["id"])
+	if($friend["user_id"] == $_SESSION["idUser"])
 	{
-		$id_ami = $friend["friend_user_id"];
+		$id_ami = $friend["friend_id"];
 	}
 	else
 	{
@@ -123,8 +131,7 @@ foreach($friends as $friend)
 
 ?>
 
-
-<input type="text" id="rechercheUser" placeholder="Rechercher un utilisateur" onkeyup="rechercherUtilisateur()">
+<input type="text" id="rechercheUser" placeholder="Rechercher un utilisateur" onkeyup="searchUsers()">
 
 <div id="resultatsRecherche"></div>
 
