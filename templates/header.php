@@ -49,6 +49,7 @@ if (!valider("connecte","SESSION")) {
 else {
 	echo "<a href=\"index.php?view=conversations\">Conversations</a>";
 	echo "<a href=\"index.php?view=friends\">Amis</a>";
+	echo "<a href=\"index.php?view=leaderboard\">Leaderboard</a>";
 	echo "<a href=\"index.php?view=calendars\">Calendriers</a>";
 	echo "<a href=\"index.php?view=profile\">Profile</a>";
 }

@@ -343,4 +343,34 @@ function createEventCalendar($id_user, $date_event){
 	return SQLInsert($SQL);
 }
 
+function isUserInGroup($id_user, $id_group)
+{
+	$id_user = proteger($id_user);
+	$id_group = proteger($id_group);
+
+	$SQL = "SELECT COUNT(*) 
+			FROM group_members
+			WHERE user_id='$id_user'
+			AND group_id='$id_group'";
+
+	return SQLGetChamp($SQL) > 0;
+}
+
+function getLeaderboard($id_group){
+
+	$id_group = proteger($id_group);
+
+	$SQL = "
+		select users.username,
+			   group_members.points
+		from group_members
+		join users
+			on users.id = group_members.user_id
+		where group_members.group_id='$id_group'
+		order by group_members.points desc
+	";
+
+	return parcoursRs(SQLSelect($SQL));
+}
+
 ?>

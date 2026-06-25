@@ -423,6 +423,19 @@ session_start();
 					exit;
 				}
 			break;
+
+			case 'get_group_leaderboard':
+				$id_user = $_SESSION["idUser"];
+				if ($id_group = valider("id_group", "GET")){
+					if (isUserInGroup($id_user, $id_group)){
+						$data = getLeaderboard($id_group);
+						ob_clean();
+						header("Content-Type: application/json");
+						echo json_encode($data);
+						exit;
+					}
+				}
+			break;
 		}
 
 	}
