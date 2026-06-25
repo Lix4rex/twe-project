@@ -439,6 +439,8 @@ function getLeaderboard($id_group){
 	";
 
 	return parcoursRs(SQLSelect($SQL));
+}
+
 // Quitte un groupe : retire l'utilisateur de la table group_members
 function leaveGroup($id_user, $id_group){
 	$id_user = proteger($id_user);
