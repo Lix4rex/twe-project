@@ -7,7 +7,7 @@ Dans ce fichier, on définit diverses fonctions permettant de récupérer des do
 
 /********* EXERCICE 2 : prise en main de la base de données *********/
 
-include_once "libs/maLibSQL.pdo.php";
+include_once(__DIR__ . "/maLibSQL.pdo.php");
 
 // inclure ici la librairie faciliant les requêtes SQL (en veillant à interdire les inclusions multiples)
 
