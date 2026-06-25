@@ -5,8 +5,7 @@
     display: flex;
     flex-direction: row;
     gap: 20px;
-    width: 100%;
-    max-width: 1200px;
+    width: 90%;
     margin: 30px auto;
     box-sizing: border-box;
     align-items: flex-start;
@@ -44,13 +43,11 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    transition: all 0.2s;
 }
 
 .calendar-friend-item:hover {
     background-color: #e8f0fe;
     border-color: #4a90e2;
-    transform: translateX(4px);
 }
 
 /* Style de l'élément sélectionné actif */
@@ -118,7 +115,6 @@
     font-weight: 600;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.15s;
 }
 
 .calendar-controls input[type="button"]:hover {
