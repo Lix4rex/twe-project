@@ -36,15 +36,15 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 <img src="ressources/ec-lille.png" />
 </div>
 
-<a href="index.php?view=accueil">Accueil</a>
+ <a href="index.php?view=accueil" class="btn-outline">Accueil</a>
 
 <?php
 // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion 
 if (!valider("connecte","SESSION"))
-	echo "<a href=\"index.php?view=login\">Se connecter</a>";
+	echo "<a href=\"index.php?view=login\" class=\"btn-outline\">Se connecter</a>";
 else {
-	echo "<a href=\"index.php?view=conversations\">Conversations</a>";
-	echo "<a href=\"index.php?view=profile\">Profile</a>";
+	echo "<a href=\"index.php?view=conversations\" class=\"btn-outline\">Conversations</a>";
+	echo "<a href=\"index.php?view=profile\" class=\"btn-outline\">Profile</a>";
 }
 ?>
 

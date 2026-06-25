@@ -7,7 +7,8 @@ var jInfoUserDiv = $("<div>")
 
 var jEmotionCb = $("<div>")
     .addClass("emotion-cb-user")
-    .append($("<input type='radio' name='emotion_user'>"))
+    .append($("<input type='radio' name='emotion_user' id='emo_rad_but'>"))
+    .append($("<label for='emo_rad_but' class='emo_rad_lab'>"))
     .append($("<p>"))
     .click(function () {
         $(this).find("input[type='radio']").prop("checked", true);
@@ -101,7 +102,7 @@ async function display_mood(){
         mood_div.append(emotionsDiv);
 
         mood_div.append(
-            $("<input type='submit'>")
+            $("<input type='submit' >")
                 .val("Remplir l'humeur du jour")
                 .click(function(){
                     var selectedEmotion = $("input[name='emotion_user']:checked").val();

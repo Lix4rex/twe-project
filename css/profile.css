@@ -1,20 +1,24 @@
 #profile {
     width: 20%;
-    border: 1px solid black;
+    border: 1px solid white;
     margin: 10px;
     padding: 10px;
     overflow: hidden;
+    display:center;
+    border-radius: 10px;
 }
 
 #personal-feeling {
     width: 80%;
-    border: 1px solid black;
+    border: 1px solid white;
     margin: 10px;
 
     display: flex;
     flex-direction: column;
 
     overflow: hidden;
+    color: white;
+    border-radius: 10px;
 }
 
 .emotions-user {
@@ -22,6 +26,7 @@
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 10px;
+    color: white;
 }
 
 .emotion-cb-user {
@@ -32,8 +37,22 @@
     border: 1px solid #ccc;
     cursor: pointer;
     user-select: none;
-    background: #f9f9f9;
+    border-radius: 20px;
+    color: white;
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+
+    font-size: 14px;
+    font-weight: bold;
+    font-family: impact, sans-serif;
+
+      background:rgba(255,255,255,0.15);
+
+
 }
+
+
 
 .emotion-cb-user:hover {
     background: #f0f0f0;
@@ -42,6 +61,31 @@
 
 .emotion-cb-user p {
     margin: 0;
-    font-size: 14px;
+    font-size: 18px;
     text-transform: capitalize;
+    
 }
+
+.emo_rad_lab {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: impact, sans-serif;
+    border: 1px solid #ccc;
+    background-color: #000;
+    border-radius: 15px;
+}
+.emo_rad_lab:hover {
+    background-color: #333;
+    border-color: #999;
+}
+.emo_rad_lab:checked {
+    background-color: #999;
+    border-color: #999;
+}
+
+
+#emo_rad_but {
+    display: none;
+}
+
