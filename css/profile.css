@@ -366,3 +366,39 @@
 .submit-mood-btn:active {
     transform: scale(0.98);
 }
+
+/* =========================
+   DIALOG JQUERY UI
+   ========================= */
+
+.ui-dialog {
+    border-radius: 10px;
+}
+
+.ui-dialog-titlebar {
+    border-radius: 10px 10px 0 0;
+}
+
+.ui-dialog-buttonpane button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* =========================
+   TIMEPICKER
+   ========================= */
+
+.ui-timepicker-container {
+    z-index: 10000 !important;
+}
+
+.ui-timepicker-list {
+    max-height: 200px !important;
+    overflow-y: auto;
+    border-radius: 6px;
+}
+
+.ui-timepicker-list li {
+    padding: 6px 10px;
+}
