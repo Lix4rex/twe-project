@@ -25,19 +25,20 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 
 <div id="weather-box">
 
-	<p>Consultez la météo de la localité de votre choix, avec l'historique des jours précédents.</p>
+    <p>Consultez la météo de la localité de votre choix, avec l'historique des jours précédents.</p>
 
-	<div id="weather-controls">
-		<input type="text" id="weather-city-input" placeholder="Nom d'une ville (ex : Lille, Paris, Tokyo...)" autocomplete="off" />
-		<input type="submit" id="weather-search-btn" value="Chercher" />
-	</div>
+    <div id="weather-controls">
+        <div class="search-input-wrapper">
+            <input type="text" id="weather-city-input" placeholder="Nom d'une ville (ex : Lille, Paris, Tokyo...)" autocomplete="off" />
+            <div id="weather-suggestions"></div>
+        </div>
+        <input type="submit" id="weather-search-btn" value="Chercher" />
+    </div>
 
-	<div id="weather-suggestions"></div>
+    <p id="weather-message"></p>
 
-	<p id="weather-message"></p>
+    <div id="weather-result"></div>
 
-	<div id="weather-result"></div>
-
-	<div id="weather-history"></div>
+    <div id="weather-history"></div>
 
 </div>

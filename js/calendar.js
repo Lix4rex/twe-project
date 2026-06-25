@@ -33,13 +33,13 @@ var currentFriendId = null;
 ========================= */
 
 function createCalendar(monday) {
-
-    var jCalendar = $("<div>")
-        .addClass("calendar");
+    // Conteneur général
+    var jCalendar = $("<div>").addClass("calendar-container");
 
     let sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
 
+    // 1. Le titre de la semaine vient en premier tout en haut
     jCalendar.append(
         $("<h2>")
             .addClass("calendar-week-title")
@@ -51,14 +51,16 @@ function createCalendar(monday) {
             )
     );
 
-    for (let i = 0; i < 7; i++) {
+    // 2. On crée une div dédiée qui va contenir uniquement la grille des 7 jours
+    var jGrid = $("<div>").addClass("calendar-grid");
 
+    for (let i = 0; i < 7; i++) {
         let current = new Date(monday);
         current.setDate(monday.getDate() + i);
 
         let dateStr = formatDate(current);
 
-        jCalendar.append(
+        jGrid.append(
             $("<div>")
                 .addClass("calendar-day")
                 .attr("data-date", dateStr)
@@ -75,6 +77,9 @@ function createCalendar(monday) {
                 )
         );
     }
+
+    // On ajoute la grille sous le titre
+    jCalendar.append(jGrid);
 
     return jCalendar;
 }

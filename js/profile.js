@@ -1,4 +1,3 @@
-
 var jInfoUserDiv = $("<div>")
     .addClass("info-user")
     .append($("<p>").addClass("username"))
@@ -16,44 +15,30 @@ var jEmotionCb = $("<div>")
 var jNextWeekBtn = $("<input type='submit' id='next-week'>")
     .val("Semaine prochaine")
     .click(function(){
-
-        currentMonday.setDate(
-            currentMonday.getDate() + 7
-        );
-
+        currentMonday.setDate(currentMonday.getDate() + 7);
         display_calendar(currentMonday);
     }); 
 
 var jPreviousWeekBtn = $("<input type='submit' id='previous-week'>")
     .val("Semaine précédente")
     .click(function(){
-
-        currentMonday.setDate(
-            currentMonday.getDate() - 7
-        );
-
+        currentMonday.setDate(currentMonday.getDate() - 7);
         display_calendar(currentMonday);
     });
 
 function getMonday(date) {
-    
     let d = new Date(date);
-    
     let day = d.getDay();
     let diff = (day === 0) ? -6 : 1 - day;
-    
     d.setDate(d.getDate() + diff);
-    
     return d;
 }
 var currentMonday = getMonday(new Date());
 
 function formatDate(date) {
-
     let year = date.getFullYear();
     let month = String(date.getMonth() + 1).padStart(2, '0');
     let day = String(date.getDate()).padStart(2, '0');
-
     return `${year}-${month}-${day}`;
 }
 
@@ -79,9 +64,9 @@ var jDayAddBtn = $("<input type='submit'>")
             },
             error: function(xhr, status, error){
                 console.log("ERROR: ", error);
-            },	
+            },  
         });
-    })
+    });
 
 var jDayTitle = $("<div>")
     .addClass("calendar-event-title")
@@ -115,7 +100,6 @@ var jDayButton = $("<input type='submit'>")
         $.ajax({
             type: "GET",
             url: "controleur.php",
-            //headers: {"debug-data":true},
             data: {"action": "delete_event_calendar", "event_id": $(this).parent().data("event_id")},
             dataType: "json",
             success: function(oRep){
@@ -123,27 +107,20 @@ var jDayButton = $("<input type='submit'>")
             },
             error: function(xhr, status, error){
                 console.log("ERROR: ", error);
-            },	
+            },  
         });
     });
 
 var jDayHour = $("<div>")
     .addClass("calendar-event-time")
     .click(function() {
-
         var $hourDiv = $(this);
         var event_id = $hourDiv.parent().data("event_id");
-
         var heure_debut = $hourDiv.data("heure_debut");
         var heure_fin = $hourDiv.data("heure_fin");
-
         var $dialog = $("<div>");
-
-        var $debut = $("<input>", {type: "text"})
-            .val(heure_debut);
-
-        var $fin = $("<input>", {type: "text"})
-            .val(heure_fin);
+        var $debut = $("<input>", {type: "text"}).val(heure_debut);
+        var $fin = $("<input>", {type: "text"}).val(heure_fin);
 
         $dialog
             .append("<p>Heure de début</p>")
@@ -176,7 +153,6 @@ var jDayHour = $("<div>")
             title: "Modifier l'horaire",
             buttons: {
                 "Valider": function() {
-
                     var newDebut = $debut.val();
                     var newFin = $fin.val();
 
@@ -191,32 +167,23 @@ var jDayHour = $("<div>")
                                 heure_fin: newFin
                             },
                             success: function() {
-
                                 $hourDiv
                                     .data("heure_debut", newDebut)
                                     .data("heure_fin", newFin)
-                                    .text(
-                                        newDebut.substring(0,5)
-                                        + " - " +
-                                        newFin.substring(0,5)
-                                    );
+                                    .text(newDebut.substring(0,5) + " - " + newFin.substring(0,5));
 
-                                $(".ui-timepicker-container").hide();
                                 $(".ui-timepicker-container").hide();
                                 $dialog.dialog("destroy").remove();
                             }, 
                             error: function(xhr, status, error){
                                 console.log("ERROR: ", error);
-                            },	
+                            },  
                         });
                     }  else {
                         alert("L'heure de fin doit être après l'heure de début");
                     }
                 },
-
                 "Annuler": function () {
-
-                    $(".ui-timepicker-container").hide();
                     $(".ui-timepicker-container").hide();
                     $dialog.dialog("destroy").remove();
                 }
@@ -233,9 +200,7 @@ const emotions = [
 ];
 
 function majPointsBets() {
-
     let points = {};
-
     $.ajax({
         type: "GET",
         url: "controleur.php",
@@ -255,13 +220,10 @@ function majPointsBets() {
                 }).then(function(oRep) {
                     if (oRep.length) {
                         let emotion = oRep[0];
-
                         if (emotion.emotion === bet.emotion) {
-
                             if (!points[bet.user_id]) {
                                 points[bet.user_id] = 0;
                             }
-
                             points[bet.user_id]++;
                         }
                     }
@@ -269,7 +231,6 @@ function majPointsBets() {
             });
 
             Promise.all(promesses).then(function() {
-
                 for (const [id_user, nbPoints] of Object.entries(points)){
                     $.ajax({
                         type: "GET",
@@ -296,7 +257,6 @@ function majPointsBets() {
                         }
                     });
                 }
-                    
             });
         }
     });
@@ -306,154 +266,137 @@ function setDayEmotion(emotion){
     $.ajax({
         type: "GET",
         url: "controleur.php",
-        //headers: {"debug-data":true},
         data: {"action": "set_day_emotion", "emotion": emotion},
         dataType: "json",
         success: function(oRep){
             majPointsBets();
-            display_mood();
+            display_user_header();
         },
         error: function(xhr, status, error){
             console.log("ERROR: ", error);
-        },	
+        },  
     });
 }
 
-function display_profile(){
+async function display_user_header() {
     var profile_div = $("div[id='profile']");
+    profile_div.empty();
 
-    $.ajax({
-        type: "GET",
-        url: "controleur.php",
-        //headers: {"debug-data":true},
-        data: {"action": "get_user"},
-        dataType: "json",
-        success: function(oRep){
-            var user = oRep[0];
-            var jCloneInfoUser = jInfoUserDiv.clone(true);
-            jCloneInfoUser.find(".username").html(user.username);
-            jCloneInfoUser.find(".firstname").html(user.first_name);
-            jCloneInfoUser.find(".lastname").html(user.last_name);
-            profile_div.append(jCloneInfoUser);
-        },
-        error: function(xhr, status, error){
-            console.log("ERROR: ", error);
-        },	
-    });
-}
+    var user = null;
+    try {
+        var oRepUser = await $.ajax({
+            type: "GET",
+            url: "controleur.php",
+            data: {"action": "get_user"},
+            dataType: "json"
+        });
+        user = oRepUser[0];
+    } catch(e) {
+        console.log("Erreur profil: ", e);
+    }
 
-async function display_mood(){
-    var mood_div = $("div[id='personal-feeling']");
+    var oRepDayEmotion = [];
+    try {
+        oRepDayEmotion = await $.ajax({
+            type: "GET",
+            url: "controleur.php",
+            data: {"action": "get_day_emotion"},
+            dataType: "json"
+        });
+    } catch(e) {
+        console.log("Erreur humeur: ", e);
+    }
 
-    mood_div.empty();
+    if (!user) return; 
 
-    var today = new Date();
-    var dateString = today.toLocaleDateString('fr-FR');
-    mood_div.append($("<p>").html("Humeur du jour (" + dateString + ")"));
+    var $userBadge = $("<div>").addClass("user-badge-container");
+    
+    var $identity = $("<div>").addClass("user-identity")
+        .append($("<span>").addClass("firstname").text(user.first_name + " "))
+        .append($("<span>").addClass("lastname").text(user.last_name))
+        .append($("<span>").addClass("username").text(" (@" + user.username + ")"));
 
-    var oRepDayEmotion = await $.ajax({
-        type: "GET",
-        url: "controleur.php",
-        //headers: {"debug-data":true},
-        data: {"action": "get_day_emotion"},
-        dataType: "json",
-        success: function(oRep){
-            return oRep;
-        },
-        error: function(xhr, status, error){
-            console.log("ERROR: ", error);
-        },	
-    });
+    $userBadge.append($identity);
+
+    var $moodZone = $("<div>").addClass("user-mood-zone");
+    var todayStr = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 
     if (oRepDayEmotion.length) {
-        var emotion = oRepDayEmotion[0];
-        mood_div.append($("<p>").html(emotion.emotion));
+        var emotion = oRepDayEmotion[0].emotion;
+        $moodZone.append($("<span>").addClass("mood-status-filled").text("Humeur (" + todayStr + ") : " + emotion));
+        $userBadge.append($moodZone);
     } else {
-
-        var emotionsDiv = $("<div>")
-            .addClass("emotions");
-        emotions.forEach(function(emotion){
-            var jCloneEmotionCb = jEmotionCb.clone(true);
-            jCloneEmotionCb.find("input").val(emotion);
-            jCloneEmotionCb.find("p").html(emotion);
-            emotionsDiv.append(jCloneEmotionCb);
+        var $emotionsDiv = $("<div>").addClass("emotions-inline");
+        
+        emotions.forEach(function(emotionName){
+            var $cb = $("<label>").addClass("emotion-inline-item")
+                .append($("<input type='radio' name='emotion_user'>").val(emotionName))
+                .append($("<span>").text(emotionName));
+            $emotionsDiv.append($cb);
         });
-        mood_div.append(emotionsDiv);
 
-        mood_div.append(
+        $moodZone.append($emotionsDiv).append(
             $("<input type='submit'>")
-                .val("Remplir l'humeur du jour")
+                .addClass("submit-mood-btn")
+                .val("Valider l'humeur")
                 .click(function(){
                     var selectedEmotion = $("input[name='emotion_user']:checked").val();
                     if (!selectedEmotion){
-                        alert("Il faut choisir une émotion")
+                        alert("Il faut choisir une émotion");
                         return;
                     }
                     setDayEmotion(selectedEmotion);
                 })
         );
+        $userBadge.append($moodZone);
     }
+
+    profile_div.append($userBadge);
 }
 
 function createCalendar(monday) {
-
-    var jCalendar = $("<div>")
-        .addClass("calendar");
+    // Conteneur externe de base
+    var jCalendar = $("<div>").addClass("calendar-container");
 
     let sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
 
+    // ÉLÉMENT 1 : Le Titre seul tout en haut
     jCalendar.append(
         $("<h2>")
             .addClass("calendar-week-title")
-            .text(
-                "Semaine du " +
-                monday.toLocaleDateString("fr-FR") +
-                " au " +
-                sunday.toLocaleDateString("fr-FR")
-            )
+            .text("Semaine du " + monday.toLocaleDateString("fr-FR") + " au " + sunday.toLocaleDateString("fr-FR"))
     );
 
-    for (let i = 0; i < 7; i++) {
+    // ÉLÉMENT 2 : La ligne qui va encapsuler uniquement les 7 colonnes
+    var jDaysGrid = $("<div>").addClass("calendar-grid-days");
 
+    for (let i = 0; i < 7; i++) {
         let current = new Date(monday);
         current.setDate(monday.getDate() + i);
-
         let dateStr = formatDate(current);
 
-        jCalendar.append(
+        jDaysGrid.append(
             $("<div>")
             .addClass("calendar-day")
             .attr("data-date", dateStr)
             .append(
                 $("<div>")
                 .addClass("calendar-day-title")
-                .text(
-                    current.toLocaleDateString(
-                        "fr-FR",
-                        {
-                            weekday: "long",
-                            day: "numeric",
-                            month: "numeric"
-                        }
-                    )
-                )
+                .text(current.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "numeric" }))
             )
             .append(jDayAddBtn.clone(true))
         );
     }
 
+    // On ajoute les jours sous le titre
+    jCalendar.append(jDaysGrid);
     return jCalendar;
 }
 
 function display_calendar(monday = currentMonday) {
-
     var calendar_div = $("#calendar");
     calendar_div.empty();
-
-    // =====================
-    // BOUTONS
-    // =====================
 
     var controls = $("<div>")
         .addClass("calendar-controls")
@@ -474,9 +417,8 @@ function display_calendar(monday = currentMonday) {
         dataType: "json",
         success: function(oRep) {
             oRep.forEach(function(event) {
-                var dayDiv = jCloneCalendar.find(
-                    ".calendar-day[data-date='" + event.date_event + "']"
-                );
+                // Va chercher la colonne du jour précis à l'intérieur de la grille
+                var dayDiv = jCloneCalendar.find(".calendar-day[data-date='" + event.date_event + "']");
 
                 if (!dayDiv.length) return;
 
@@ -485,27 +427,24 @@ function display_calendar(monday = currentMonday) {
                         .addClass("calendar-event")
                         .data("event_id", event.id)
                         .append(jDayTitle.clone(true).text(event.titre))
-                        .append(jDayButton.clone(true))
                         .append(
                             jDayHour.clone(true)
-                                .text(
-                                    event.heure_debut.substring(0,5)
-                                    + " - " +
-                                    event.heure_fin.substring(0,5)
-                                )
-                                .data("heure_debut", event.heure_debut)
-                                .data("heure_fin", event.heure_fin)
+                            .text(event.heure_debut.substring(0,5) + " - " + event.heure_fin.substring(0,5))
+                            .data("heure_debut", event.heure_debut)
+                            .data("heure_fin", event.heure_fin)
                         )
                         .append(jDayDescription.clone(true).text(event.description || ""))
+                        .append(jDayButton.clone(true))
                 );
             });
             calendar_div.append(jCloneCalendar);
         },
         error: function(xhr, status, error){
             console.log("ERROR: ", error);
-        },	
+        },  
     });
 }
+
 $(document).on("click", "#delete-account-btn", function(){
     if (confirm("Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible.")){
         window.location = "controleur.php?action=delete_account";
@@ -513,78 +452,52 @@ $(document).on("click", "#delete-account-btn", function(){
 });
 
 $(document).ready(function(){
-    display_profile();
-    display_mood();
+    display_user_header();
     display_calendar();
-
     majPointsBets();
 });
-
-
 
 $(document).on("keyup", "textarea", function (context) {
     switch (context.key){
         case "Enter":
-
             var jComponent = $(this);
             var event_id = jComponent.parent().data("event_id");
             var new_text = jComponent.val();
 
             if (jComponent.data("title")){
-
                 var previous_text = jComponent.data("title");
-
-                var newJComponent = jDayTitle.clone(true)
-                    .text(previous_text);
-
+                var newJComponent = jDayTitle.clone(true).text(previous_text);
                 jComponent.replaceWith(newJComponent);
 
                 $.ajax({
                     type: "GET",
                     url: "controleur.php",
-                    data: {
-                        action: "update_title_calendar",
-                        event_id: event_id,
-                        title: new_text
-                    },
+                    data: { action: "update_title_calendar", event_id: event_id, title: new_text },
                     dataType: "json",
                     success: function(oRep) {
                         newJComponent.replaceWith(jDayTitle.clone(true).text(new_text));
                     },
-                    error: function(xhr, status, error){
-                        console.log("ERROR: ", error);
-                    },	
+                    error: function(xhr, status, error){ console.log("ERROR: ", error); },  
                 });
 
             } else if (jComponent.data("description")){
                 var previous_text = jComponent.data("description");
-
-                var newJComponent = jDayDescription.clone(true)
-                    .text(previous_text);
-
+                var newJComponent = jDayDescription.clone(true).text(previous_text);
                 jComponent.replaceWith(newJComponent);
 
                 $.ajax({
                     type: "GET",
                     url: "controleur.php",
-                    data: {
-                        action: "update_description_calendar",
-                        event_id: event_id,
-                        description: new_text
-                    },
+                    data: { action: "update_description_calendar", event_id: event_id, description: new_text },
                     dataType: "json",
                     success: function(oRep) {
                         newJComponent.replaceWith(jDayDescription.clone(true).text(new_text));
                     },
-                    error: function(xhr, status, error){
-                        console.log("ERROR: ", error);
-                    },	
+                    error: function(xhr, status, error){ console.log("ERROR: ", error); },  
                 });
             }
-
         break;
         case "Escape":
-            
             if ($(this).data("title")){
                 var previous_text = $(this).data("title");
                 $(this).replaceWith(jDayTitle.clone(true).text(previous_text).data($(this).data()));
@@ -592,8 +505,6 @@ $(document).on("keyup", "textarea", function (context) {
                 var previous_text = $(this).data("description");
                 $(this).replaceWith(jDayDescription.clone(true).text(previous_text).data($(this).data()));
             }
-
         break;
-
     }
 });

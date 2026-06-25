@@ -1,138 +1,179 @@
-/* ===== ONGLET MÉTÉO ===== */
-
+/* ==========================================================================
+   MODULE MÉTÉO
+   ========================================================================== */
 #weather-box {
-    border: 1px solid black;
-    margin: 10px;
-    padding: 15px;
-    max-width: 640px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-sizing: border-box;
+    /* AJOUT : Marges sur les côtés (20px) et centrage si la largeur est limitée */
+    margin: 0 auto; 
+    width: 80%; 
 }
 
 #weather-controls {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 10px 0;
+    gap: 10px;
+    margin-bottom: 25px;
+    align-items: flex-start;
+    /* MODIFICATION : Centré horizontalement et limité à 50% de la largeur */
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Permet à l'input de prendre toute la place restante dans les 50% et sert de repère pour les suggestions */
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
 }
 
 #weather-city-input {
-    padding: 6px;
-    flex: 1 1 auto;
-    min-width: 160px;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-sizing: border-box;
 }
 
 #weather-search-btn {
+    background-color: #4a90e2;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
     cursor: pointer;
-    padding: 6px 12px;
-}
-#weather-message {
-    margin: 8px 0;
-}
-#weather-message.error {
-    color: #c0392b;
-}
-#weather-message.success {
-    color: green;
+    height: 41px; /* Aligné sur la hauteur de l'input */
+    transition: background-color 0.2s;
 }
 
+#weather-search-btn:hover {
+    background-color: #357abd;
+}
+
+/* Menu déroulant des suggestions (flottant sous l'input de 50%) */
+#weather-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #4a5568;
+    transition: background-color 0.15s;
+}
+
+.suggestion-item:hover {
+    background-color: #edf2f7;
+    color: #2d3748;
+}
+
+/* Messages de statut - Centré aussi pour s'aligner avec la recherche */
+#weather-message {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-align: center; 
+}
+#weather-message.error { color: #e53e3e; }
+#weather-message.success { color: #38a169; }
+
+/* Bloc résultat météo actuelle */
 .weather-header {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+    gap: 20px;
+    margin-bottom: 25px;
+    background-color: #f8fafc;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
 }
-.weather-header .weather-icon {
-    width: 90px;
-    height: 90px;
+
+.weather-icon {
+    width: 80px;
+    height: 80px;
 }
-.weather-header h2 {
+
+.weather-desc {
+    text-transform: capitalize;
+    color: #718096;
+    margin: 4px 0;
+    font-size: 1rem;
+}
+
+.weather-temp-big {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2d3748;
     margin: 0;
 }
-.weather-header .weather-desc {
-    margin: 2px 0;
-    text-transform: capitalize;
-    color: #555;
-}
-.weather-header .weather-temp-big {
-    margin: 2px 0;
-    font-size: 26px;
-    font-weight: bold;
-}
 
-.weather-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-}
-.weather-table td {
-    padding: 6px 10px;
-    border-bottom: 1px solid #eee;
-}
-.weather-table .weather-label {
-    font-weight: 600;
-    width: 45%;
-    color: #333;
-}
-.weather-table .weather-value {
-    color: #111;
-}
-
-/* ===== SUGGESTIONS DE VILLES ===== */
-#weather-suggestions {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 220px;
-    overflow-y: auto;
-    margin-bottom: 8px;
-    max-width: 100%;
-}
-#weather-suggestions:empty {
-    display: none;
-}
-#weather-suggestions .suggestion-item {
-    padding: 8px 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-}
-#weather-suggestions .suggestion-item:last-child {
-    border-bottom: none;
-}
-#weather-suggestions .suggestion-item:hover {
-    background-color: #f0efe8;
-}
-
-/* ===== HISTORIQUE MÉTÉO ===== */
-#weather-history {
-    margin-top: 18px;
-}
-#weather-history h3 {
-    margin-bottom: 6px;
-    color: #23527c;
-}
+/* Tables de données */
+.weather-table, 
 .weather-history-table {
     width: 100%;
     border-collapse: collapse;
-}
-.weather-history-table th,
-.weather-history-table td {
-    padding: 6px 10px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-}
-.weather-history-table th {
-    background-color: #f0efe8;
-    font-weight: 600;
-}
-.weather-history-note {
-    color: #777;
-    font-style: italic;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
 }
 
-/* ===== GRAPHIQUES MÉTÉO ===== */
+.weather-table td, 
+.weather-history-table th, 
+.weather-history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+}
+
+.weather-history-table th {
+    background-color: #f8fafc;
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.weather-label {
+    color: #718096;
+    font-weight: 500;
+    width: 40%;
+}
+
+.weather-value {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+/* Conteneurs pour les graphiques Chart.js */
 .weather-chart {
+    height: 250px;
     position: relative;
-    height: 260px;
-    width: 100%;
-    margin-bottom: 18px;
+    margin-bottom: 35px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#weather-history h3 {
+    font-size: 1.2rem;
+    color: #2d3748;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-left: 4px solid #4a90e2;
+    padding-left: 10px;
 }

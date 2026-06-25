@@ -1,36 +1,30 @@
 <?php
-
-//C'est la propriété php_self qui nous l'indique : 
-// Quand on vient de index : 
-// [PHP_SELF] => /chatISIG/index.php 
-// Quand on vient directement par le répertoire templates
-// [PHP_SELF] => /chatISIG/templates/accueil.php
-
-// Si la page est appelée directement par son adresse, on redirige en passant pas la page index
-// Pas de soucis de bufferisation, puisque c'est dans le cas où on appelle directement la page sans son contexte
 if (basename($_SERVER["PHP_SELF"]) != "index.php")
 {
-	header("Location:../index.php?view=accueil");
-	die("");
+    header("Location:../index.php?view=accueil");
+    die("");
 }
-
 ?>
 
-<script src="js/jquery-3.5.1.min.js">
-// rien ici ! 
-</script>
-
-<script src="js/calendar.js">
-</script>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/calendar.js"></script>
 
 <div id="corps">
-	<h1>Calendriers</h1>
+    <h1>Calendriers</h1>
 </div>
 
 <div id="calendar_main_box">
-	<div id="friend-box">
-	</div>
+    
+    <div id="calendar-sidebar">
+        <h2>Mes Amis</h2>
+        <div id="friend-box">
+            </div>
+    </div>
 
-	<div id="calendar-box">
-	</div>
+    <div id="calendar-box-wrapper">
+        <div id="calendar-box">
+            <p class="select-friend-msg">Sélectionnez un ami dans la liste pour visualiser son emploi du temps.</p>
+        </div>
+    </div>
+
 </div>

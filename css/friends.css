@@ -1,124 +1,206 @@
-#main_box #add-friend-box,
-#main_box #friend-requests-box,
-#main_box #sent-requests-box,
-#main_box #friends-list-box {
-    border: 1px solid black;
-    margin: 10px;
-    padding: 15px;
+/* ==========================================================================
+   MODULE GESTION DES AMIS
+   ========================================================================== */
+#friends-main-box {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    box-sizing: border-box;
+    width: 90%; 
+    max-width: 1200px; 
+    margin: 30px auto; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-#add-friend-box h2,
-#friend-requests-box h2,
-#sent-requests-box h2,
-#friends-list-box h2 {
+/* Titres des sections */
+#friends-main-box h2 {
+    font-size: 1.2rem;
+    color: #2d3748;
     margin-top: 0;
+    margin-bottom: 15px;
+    border-left: 4px solid #4a90e2;
+    padding-left: 10px;
+}
+
+/* Zone de recherche (Alignée et restreinte à 50%) */
+#add-friend-box {
+    margin-bottom: 35px;
+}
+
+#friend-search-controls {
+    display: flex;
+    gap: 10px;
+    width: 50%;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
 }
 
 #friend-username-input {
-    padding: 6px;
-    margin-right: 8px;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-sizing: border-box;
 }
 
 #add-friend-btn {
+    background-color: #4a90e2;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
     cursor: pointer;
-    padding: 6px 12px;
+    height: 41px;
+    transition: background-color 0.2s;
 }
 
-#add-friend-message {
-    margin-top: 8px;
+#add-friend-btn:hover {
+    background-color: #357abd;
 }
 
-#add-friend-message.success {
-    color: green;
+/* Boîte de suggestions flottante pour la recherche d'amis */
+#friend-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-#add-friend-message.error {
-    color: red;
-}
-
-.friend-item,
-.request-item,
-.sent-item {
+#friend-suggestions .suggestion-item {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    margin-bottom: 8px;
-    background: #f9f9f9;
+    justify-content: space-between;
+    transition: background-color 0.15s;
 }
 
-.friend-username,
-.request-username,
-.sent-username {
-    font-weight: bold;
+#friend-suggestions .suggestion-item:hover {
+    background-color: #edf2f7;
 }
 
-.friend-fullname,
-.request-fullname,
-.sent-fullname {
-    color: #555;
+.suggestion-fullname {
+    font-weight: 600;
+    color: #2d3748;
 }
 
-.friend-item button,
-.request-item button,
-.sent-item button {
-    margin-left: auto;
-    cursor: pointer;
-    padding: 5px 10px;
+.suggestion-username {
+    color: #718096;
+    font-size: 0.85rem;
 }
 
-.btn-accept-request {
-    background: #d6f5d6;
-    border: 1px solid #2e7d32;
+/* Feedback messages centré sous la recherche */
+#add-friend-message {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: 500;
+    text-align: center;
+}
+#add-friend-message.error { color: #e53e3e; }
+#add-friend-message.success { color: #38a169; }
+
+/* ==========================================================================
+   AFFICHAGE DES LISTES ET CARTES (Layout en colonnes)
+   ========================================================================== */
+.friends-lists-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
-.btn-reject-request,
-.btn-remove-friend,
-.btn-cancel-request {
-    background: #fde0e0;
-    border: 1px solid #c62828;
+.friends-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
 }
 
 .empty-msg {
-    color: #777;
+    color: #a0aec0;
+    font-size: 0.9rem;
     font-style: italic;
+    margin: 5px 0 0 0;
 }
 
-/* ===== SUGGESTIONS DE RECHERCHE D'AMIS ===== */
-#friend-suggestions {
-    margin-top: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 220px;
-    overflow-y: auto;
-}
-#friend-suggestions:empty {
-    display: none;
-}
-#friend-suggestions .suggestion-item {
+/* Structure des lignes d'utilisateurs (Amis, requêtes reçues/envoyées) */
+.friend-item, .request-item, .sent-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
+    background-color: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    gap: 15px;
 }
-#friend-suggestions .suggestion-item:last-child {
-    border-bottom: none;
+
+.friend-item:last-child, .request-item:last-child, .sent-item:last-child {
+    margin-bottom: 0;
 }
-#friend-suggestions .suggestion-item:hover {
-    background-color: #f0efe8;
+
+/* Nom d'affichage complet */
+.friend-fullname, .request-fullname, .sent-fullname {
+    font-weight: 600;
+    color: #2d3748;
+    flex: 1; /* Pousse les boutons d'action tout à droite */
 }
-#friend-suggestions .suggestion-fullname {
+
+/* Petit badge d'identifiant en retrait */
+.friend-username, .request-username, .sent-username {
+    color: #4a90e2;
+    background-color: #e8f0fe;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
     font-weight: 600;
 }
-#friend-suggestions .suggestion-username {
-    color: #777;
-    font-size: 13px;
+
+/* ==========================================================================
+   STYLE DES BOUTONS DES COMPOSANTS
+   ========================================================================== */
+.btn-remove-friend, .btn-reject-request, .btn-cancel-request, .btn-accept-request {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
 }
-#friend-suggestions .empty-msg {
-    padding: 8px 10px;
-    color: #777;
-    margin: 0;
+
+/* Action positive : Accepter */
+.btn-accept-request {
+    background-color: #4cbd96;
+    color: #ffffff;
+}
+.btn-accept-request:hover {
+    background-color: #3ca37e;
+}
+
+/* Action destructive/Annulation : Retirer, Rejeter, Annuler */
+.btn-remove-friend, .btn-reject-request, .btn-cancel-request {
+    background-color: #fff5f5;
+    color: #e53e3e;
+    border-color: #fed7d7;
+}
+.btn-remove-friend:hover, .btn-reject-request:hover, .btn-cancel-request:hover {
+    background-color: #e53e3e;
+    color: #ffffff;
+    border-color: #e53e3e;
 }

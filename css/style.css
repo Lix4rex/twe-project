@@ -1,50 +1,143 @@
-#banniere {
-	height:70px;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-#stitre
-{
-	text-align:center;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    color: #333333;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: #4a90e2;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #357abd;
+}
+
+#banniere {
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    min-height: 70px;
 }
 
 #logo {
-	display:inline;
-	float:left;
+    display: flex;
+    align-items: center;
 }
 
-#banniere img{
-	height:60px;
-	margin-right:10px;
+#banniere img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
 }
 
-#banniere a{
-	float:left;
-	margin-left:10px;
+#stitre {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff6b6b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 15px;
+    flex-grow: 1;
+}
+
+#banniere a {
+    margin: 5px 10px;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #5c6b73;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+#banniere a:hover {
+    background-color: #e8f0fe;
+    color: #4a90e2;
+}
+
+#banniere a[href*="login"], 
+#banniere a[href*="register"] {
+    background-color: #4a90e2;
+    color: #ffffff;
+}
+
+#banniere a[href*="login"]:hover, 
+#banniere a[href*="register"]:hover {
+    background-color: #357abd;
 }
 
 #banniere form {
-	float:right;
+    display: flex;
+    align-items: center;
 }
 
 #banniere input {
-	float:left;
-}
-
-#pied {
-	bottom:5px;left:5px;right:5px;
-	border-top :1px solid black;
-	padding:20px;
-	margin:10px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 #corps {
-	border :1px solid black;
-	padding:20px;
-	margin:10px;
+    background-color: #ffffff;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 #titre {
-	border :1px solid black;
-	padding:20px;
-	margin:10px;
+    background: linear-gradient(135deg, #4a90e2, #63b3ed);
+    color: #ffffff;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+#pied {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    border-top: 1px solid #e2e8f0;
+    color: #a0aec0;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    #banniere {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    #stitre {
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    #banniere a {
+        width: 100%;
+        margin: 4px 0;
+        text-align: center;
+    }
+
+    #corps {
+        margin: 15px;
+        padding: 15px;
+    }
 }

@@ -32,20 +32,18 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 </script>
 
 <div id="corps">
-	<h1>Profile</h1>
+    <h1>Profile</h1>
 </div>
 
 <div id="main_box">
-    <div id="profile">
-    </div>
-
-    <div id="personal-feeling">
+    
+    <div id="profile-sidebar">
+        <div id="profile">
+            </div>
+        
+        <input type="submit" id="delete-account-btn" value="Supprimer mon compte" />
     </div>
 
     <div id="calendar">
-    </div>
-</div>
-
-<div id="danger-zone">
-    <input type="submit" id="delete-account-btn" value="Supprimer mon compte" />
+        </div>
 </div>
