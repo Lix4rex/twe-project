@@ -343,6 +343,215 @@ async function display_messages(id_group){
     }
 }
 
+async function display_group_users(id_group){
+
+    const group_users = await $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        //headers: {"debug-data":true},
+        data: {"action": "get_group_users", "id_group": id_group},
+        dataType: "json",
+        success: function(oRep){
+            return oRep;
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        },
+    });
+
+    for (var group_user of group_users){
+
+        const oRepUser = await $.ajax({
+            type: "GET",
+            url: "controleur.php",
+            //headers: {"debug-data":true},
+            data: {"action": "get_user", "id_user": group_user.user_id},
+            dataType: "json",
+            success: function(oRep){
+                return oRep;
+            },
+            error: function(xhr, status, error){
+                console.log("ERROR: ", error);
+            },
+        });
+
+        const user = oRepUser[0];
+        var jCloneUserDiv = jUserDiv.clone(true);
+        jCloneUserDiv.find(".firstname").html(user.first_name);
+        jCloneUserDiv.find(".lastname").html(user.last_name);
+        jCloneUserDiv.find(".username").html(user.username);
+        jCloneUserDiv.data("friend_id_user", group_user.user_id);
+
+        // Bouton "Info météo" : ouvre la corrélation humeur / météo de cet ami.
+        // stopPropagation évite de déclencher le clic du .user (panneau de pari).
+        var jInfoMeteoBtn = $("<input type='button'>")
+            .addClass("info-meteo-btn")
+            .val("Info météo")
+            .click(function(e){
+                e.stopPropagation();
+                var userDiv = $(this).closest(".user");
+                var fid = userDiv.data("friend_id_user");
+                var nom = userDiv.find(".firstname").html() + " " + userDiv.find(".lastname").html();
+                display_weather_correlation(fid, nom);
+            });
+        jCloneUserDiv.append(jInfoMeteoBtn);
+
+        $(".conversation-users").data("id_group", id_group);
+        $(".conversation-users").append(jCloneUserDiv);
+    }
+}
+
+async function display_conversation(id_group){
+    const conversations_div = $("#conversation");
+
+    conversations_div.empty();
+
+    const oRepGroup = await $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        //headers: {"debug-data":true},
+        data: {"action": "get_group", "id_group": id_group},
+        dataType: "json",
+        success: function(oRep){
+            return oRep;
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        },	
+    });
+    const group = oRepGroup[0];
+
+    conversations_div.append(
+        $("<div>")
+            .addClass("conversation-title")
+            .append($("<p>").html("Conversation du groupe " + group.name))
+            .append(
+                $("<input type='button'>")
+                    .addClass("leave-group-btn")
+                    .val("Quitter le groupe")
+                    .click(function(){
+                        if (confirm("Voulez-vous vraiment quitter le groupe " + group.name + " ?")){
+                            leaveGroup(id_group);
+                        }
+                    })
+            )
+    );
+
+    conversations_div.append(
+        $("<div>")
+            .addClass("conversation-body")
+            .append(
+                $("<div>").addClass("messages")
+            )
+            .append(
+                $("<div>").addClass("conversation-users")
+            )
+    );
+
+    display_messages(id_group);
+    display_group_users(id_group);
+    
+    conversations_div.append(
+        $("<div>")
+            .addClass("send-div")
+            .append($("<textarea>"))
+            .append(
+                $("<input type='button'>")
+                    .val("Envoyer")
+                    .click(function() {
+                        var message = $(this).prev().val()
+                        sendMessage(id_group, message);
+                    })
+            )
+    );
+}
+
+
+$(document).on("click", ".group", function () {
+    var id_group = $(this).data("id");
+    display_conversation(id_group);
+});
+
+function display_friends_checklist(){
+    var checklistDiv = $("#friends-checklist");
+    checklistDiv.empty();
+
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {"action": "get_friends"},
+        dataType: "json",
+        success: function(oRep){
+            oRep.forEach(function(friend){
+                checklistDiv.append(
+                    $("<label>")
+                        .addClass("friend-checkbox")
+                        .append($("<input type='checkbox'>").val(friend.id))
+                        .append($("<span>").html(friend.username))
+                );
+            });
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        },
+    });
+}
+
+function createGroup(name, friend_ids){
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {"action": "create_group", "group_name": name, "friend_ids": friend_ids.join(",")},
+        dataType: "json",
+        success: function(oRep){
+            if (oRep.success){
+                $("#new-group-name").val("");
+                $("#create-group-form input[type='checkbox']").prop("checked", false);
+                $("#create-group-form").hide();
+                $("#create-group-message").html("");
+                display_groups();
+            } else {
+                $("#create-group-message").html(oRep.error);
+            }
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        },
+    });
+}
+
+$(document).on("click", "#show-create-group-btn", function(){
+    $("#create-group-form").toggle();
+    display_friends_checklist();
+});
+
+$(document).on("click", "#confirm-create-group-btn", function(){
+    var name = $("#new-group-name").val();
+    if (!name){
+        $("#create-group-message").html("Il faut donner un nom au groupe");
+        return;
+    }
+
+    var friend_ids = [];
+    $("#friends-checklist input[type='checkbox']:checked").each(function(){
+        friend_ids.push($(this).val());
+    });
+
+    createGroup(name, friend_ids);
+});
+
+$(document).ready(function(){
+    display_groups();
+});
+
+
+
+
+
+
+
+
+
 // ====================================================================
 //  CORRÉLATION HUMEUR / MÉTÉO (bouton "Info météo" d'un membre)
 //  Aide aux pronostics : on croise les humeurs passées de l'ami
@@ -670,205 +879,3 @@ function construireCorrelation(panel, emoByDate, d){
     });
     correlationCharts.push(cc);
 }
-
-
-async function display_group_users(id_group){
-
-    const group_users = await $.ajax({
-        type: "GET",
-        url: "controleur.php",
-        //headers: {"debug-data":true},
-        data: {"action": "get_group_users", "id_group": id_group},
-        dataType: "json",
-        success: function(oRep){
-            return oRep;
-        },
-        error: function(xhr, status, error){
-            console.log("ERROR: ", error);
-        },
-    });
-
-    for (var group_user of group_users){
-
-        const oRepUser = await $.ajax({
-            type: "GET",
-            url: "controleur.php",
-            //headers: {"debug-data":true},
-            data: {"action": "get_user", "id_user": group_user.user_id},
-            dataType: "json",
-            success: function(oRep){
-                return oRep;
-            },
-            error: function(xhr, status, error){
-                console.log("ERROR: ", error);
-            },
-        });
-
-        const user = oRepUser[0];
-        var jCloneUserDiv = jUserDiv.clone(true);
-        jCloneUserDiv.find(".firstname").html(user.first_name);
-        jCloneUserDiv.find(".lastname").html(user.last_name);
-        jCloneUserDiv.find(".username").html(user.username);
-        jCloneUserDiv.data("friend_id_user", group_user.user_id);
-
-        // Bouton "Info météo" : ouvre la corrélation humeur / météo de cet ami.
-        // stopPropagation évite de déclencher le clic du .user (panneau de pari).
-        var jInfoMeteoBtn = $("<input type='button'>")
-            .addClass("info-meteo-btn")
-            .val("Info météo")
-            .click(function(e){
-                e.stopPropagation();
-                var userDiv = $(this).closest(".user");
-                var fid = userDiv.data("friend_id_user");
-                var nom = userDiv.find(".firstname").html() + " " + userDiv.find(".lastname").html();
-                display_weather_correlation(fid, nom);
-            });
-        jCloneUserDiv.append(jInfoMeteoBtn);
-
-        $(".conversation-users").data("id_group", id_group);
-        $(".conversation-users").append(jCloneUserDiv);
-    }
-}
-
-async function display_conversation(id_group){
-    const conversations_div = $("#conversation");
-
-    conversations_div.empty();
-
-    const oRepGroup = await $.ajax({
-        type: "GET",
-        url: "controleur.php",
-        //headers: {"debug-data":true},
-        data: {"action": "get_group", "id_group": id_group},
-        dataType: "json",
-        success: function(oRep){
-            return oRep;
-        },
-        error: function(xhr, status, error){
-            console.log("ERROR: ", error);
-        },	
-    });
-    const group = oRepGroup[0];
-
-    conversations_div.append(
-        $("<div>")
-            .addClass("conversation-title")
-            .append($("<p>").html("Conversation du groupe " + group.name))
-            .append(
-                $("<input type='button'>")
-                    .addClass("leave-group-btn")
-                    .val("Quitter le groupe")
-                    .click(function(){
-                        if (confirm("Voulez-vous vraiment quitter le groupe " + group.name + " ?")){
-                            leaveGroup(id_group);
-                        }
-                    })
-            )
-    );
-
-    conversations_div.append(
-        $("<div>")
-            .addClass("conversation-body")
-            .append(
-                $("<div>").addClass("messages")
-            )
-            .append(
-                $("<div>").addClass("conversation-users")
-            )
-    );
-
-    display_messages(id_group);
-    display_group_users(id_group);
-    
-    conversations_div.append(
-        $("<div>")
-            .addClass("send-div")
-            .append($("<textarea>"))
-            .append(
-                $("<input type='button'>")
-                    .val("Envoyer")
-                    .click(function() {
-                        var message = $(this).prev().val()
-                        sendMessage(id_group, message);
-                    })
-            )
-    );
-}
-
-
-$(document).on("click", ".group", function () {
-    var id_group = $(this).data("id");
-    display_conversation(id_group);
-});
-
-function display_friends_checklist(){
-    var checklistDiv = $("#friends-checklist");
-    checklistDiv.empty();
-
-    $.ajax({
-        type: "GET",
-        url: "controleur.php",
-        data: {"action": "get_friends"},
-        dataType: "json",
-        success: function(oRep){
-            oRep.forEach(function(friend){
-                checklistDiv.append(
-                    $("<label>")
-                        .addClass("friend-checkbox")
-                        .append($("<input type='checkbox'>").val(friend.id))
-                        .append($("<span>").html(friend.username))
-                );
-            });
-        },
-        error: function(xhr, status, error){
-            console.log("ERROR: ", error);
-        },
-    });
-}
-
-function createGroup(name, friend_ids){
-    $.ajax({
-        type: "GET",
-        url: "controleur.php",
-        data: {"action": "create_group", "group_name": name, "friend_ids": friend_ids.join(",")},
-        dataType: "json",
-        success: function(oRep){
-            if (oRep.success){
-                $("#new-group-name").val("");
-                $("#create-group-form input[type='checkbox']").prop("checked", false);
-                $("#create-group-form").hide();
-                $("#create-group-message").html("");
-                display_groups();
-            } else {
-                $("#create-group-message").html(oRep.error);
-            }
-        },
-        error: function(xhr, status, error){
-            console.log("ERROR: ", error);
-        },
-    });
-}
-
-$(document).on("click", "#show-create-group-btn", function(){
-    $("#create-group-form").toggle();
-    display_friends_checklist();
-});
-
-$(document).on("click", "#confirm-create-group-btn", function(){
-    var name = $("#new-group-name").val();
-    if (!name){
-        $("#create-group-message").html("Il faut donner un nom au groupe");
-        return;
-    }
-
-    var friend_ids = [];
-    $("#friends-checklist input[type='checkbox']:checked").each(function(){
-        friend_ids.push($(this).val());
-    });
-
-    createGroup(name, friend_ids);
-});
-
-$(document).ready(function(){
-    display_groups();
-});
