@@ -30,6 +30,13 @@ function getGroupUsers($id_group){
 	return parcoursRs(SQLSelect($SQL));
 }
 
+function getGroupsTwoUsers($id_user_1, $id_user_2){
+	$id_user_1 = proteger($id_user_1);
+	$id_user_2 = proteger($id_user_2);
+	$SQL = "select gm1.group_id from group_members gm1 join group_members gm2 on gm1.group_id = gm2.group_id where gm1.user_id='$id_user_1' and gm2.user_id='$id_user_2';";
+	return parcoursRs(SQLSelect($SQL));
+}
+
 function getUser($id_user){
 	$id_user = proteger($id_user);
 	$SQL = "select * from users where id='$id_user'";
@@ -104,6 +111,20 @@ function setEmotion($id_user, $emotion){
 	$emotion = proteger($emotion);
 	$SQL = "insert into real_emotions (user_id, emotion) values ('$id_user', '$emotion')";
 	return SQLInsert($SQL);
+}
+
+function getBetOnUser($id_user){
+	$id_user = proteger($id_user);
+	$SQL = "select * from paris where friend_user_id='$id_user';";
+	return parcoursRs(SQLSelect($SQL));
+}
+
+function setPoints($id_user, $id_group, $points){
+	$id_user = proteger($id_user);
+	$id_group = proteger($id_group);
+	$points = proteger($points);
+	$SQL = "update group_members set points='$points' where user_id='$id_user' and group_id='$id_group';";
+	return SQLUpdate($SQL);
 }
 
 function getDayEmotion($id_user, $date){
@@ -272,6 +293,54 @@ function addFriendToGroup($id_user, $id_group, $friend_id_user){
 	if ($ok === false) return ["success" => false, "error" => "Cet utilisateur est déjà dans le groupe"];
 
 	return ["success" => true];
+}
+
+function getUserCalendar($id_user, $date){
+	$id_user = proteger($id_user);
+	$date = proteger($date);
+
+	$date_fin = date('Y-m-d', strtotime($date . ' +6 days'));
+
+	$SQL = "select * from planning_events where user_id='$id_user' and date_event BETWEEN '$date' and '$date_fin' order by date_event, heure_debut";
+	return parcoursRs(SQLSelect($SQL));
+}
+
+function updateTitleCalendar($event_id, $title){
+	$event_id = proteger($event_id);
+	$title = proteger($title);
+
+	$SQL = "update planning_events set titre='$title' where id='$event_id';";
+	return SQLUpdate($SQL);
+}
+
+function updateDescriptionCalendar($event_id, $description){
+	$event_id = proteger($event_id);
+	$description = proteger($description);
+
+	$SQL = "update planning_events set description='$description' where id='$event_id';";
+	return SQLUpdate($SQL);
+}
+
+function updateHourCalendar($event_id, $heure_debut, $heure_fin){
+	$event_id = proteger($event_id);
+	$heure_debut = proteger($heure_debut);
+	$heure_fin = proteger($heure_fin);
+
+	$SQL = "update planning_events set heure_debut='$heure_debut', heure_fin='$heure_fin' where id='$event_id';";
+	return SQLUpdate($SQL);
+}
+
+function deleteEventCalendar($event_id){
+	$event_id = proteger($event_id);
+	$SQL = "delete from planning_events where id='$event_id'";
+	return SQLDelete($SQL);
+}
+
+function createEventCalendar($id_user, $date_event){
+	$id_user = proteger($id_user);
+	$date_event = proteger($date_event);
+	$SQL = "insert into planning_events (user_id, date_event, titre, description, heure_debut, heure_fin) values ('$id_user', '$date_event', 'Titre', 'Description', '00:00:00', '00:00:00');";
+	return SQLInsert($SQL);
 }
 
 ?>

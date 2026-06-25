@@ -24,6 +24,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 	<link rel="stylesheet" type="text/css" href="css/conversations.css">
 	<link rel="stylesheet" type="text/css" href="css/profile.css">
 	<link rel="stylesheet" type="text/css" href="css/friends.css">
+	<link rel="stylesheet" type="text/css" href="css/calendars.css">
 </head>
 <!-- **** F I N **** H E A D **** -->
 
@@ -48,6 +49,7 @@ if (!valider("connecte","SESSION")) {
 else {
 	echo "<a href=\"index.php?view=conversations\">Conversations</a>";
 	echo "<a href=\"index.php?view=friends\">Amis</a>";
+	echo "<a href=\"index.php?view=calendars\">Calendriers</a>";
 	echo "<a href=\"index.php?view=profile\">Profile</a>";
 }
 ?>

@@ -40,12 +40,8 @@ Les formulaires de toutes les vues générées enverront leurs données vers la 
 			include("templates/register.php");
 		break; 
 
-		case "conversations" :
-			include("templates/conversations.php");
-		break;
-
 		default : // si le template correspondant à l'argument existe, on l'affiche
-			if (file_exists("templates/$view.php"))
+			if (file_exists("templates/$view.php") && $_SESSION["connecte"])
 				include("templates/$view.php");
 			else
 				include("templates/accueil.php");

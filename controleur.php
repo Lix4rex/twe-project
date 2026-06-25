@@ -96,6 +96,29 @@ session_start();
 				}
 			break;
 
+			case 'get_group_two_users':
+				$id_user_1 = $_SESSION["idUser"];
+				if ($id_user_2 = valider("id_user", "GET")){
+					$groups = getGroupsTwoUsers($id_user_1, $id_user_2);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($groups);
+					exit;
+				}
+			break;
+
+			case 'set_points':
+				if ($id_user = valider("id_user", "GET"))
+				if ($id_group = valider("id_group", "GET"))
+				if ($points = valider("points", "GET")){
+					$data = setPoints($id_user, $id_group, $points);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($data);
+					exit;
+				}
+			break;
+
 			case 'get_user':
 				if ($id_user = valider("id_user", "GET")){
 					$user = getUser($id_user); 
@@ -190,6 +213,17 @@ session_start();
 				}
 			break;
 
+			case 'get_bet_on_user':
+				$id_user = $_SESSION["idUser"];
+				if ($test = valider("id_user", "GET")) $id_user = $test;
+				$bets = getBetOnUser($id_user);
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($bets);
+				exit;
+
+			break;
+
 			case 'set_day_emotion':
 				if ($emotion = valider("emotion", "GET")){
 					$id_user = $_SESSION["idUser"];
@@ -205,8 +239,9 @@ session_start();
 
 			case 'get_day_emotion':
 				$id_user = $_SESSION["idUser"];
+				$date = date("Y-m-d");
+				if ($test = valider("date_bet", "GET")) $date = $test;
 				if ($id_user){
-					$date = date("Y-m-d");
 					$emotion = getDayEmotion($id_user, $date);
 					ob_clean();
 					header("Content-Type: application/json");
@@ -318,6 +353,73 @@ session_start();
 					ob_clean();
 					header("Content-Type: application/json");
 					echo json_encode($result);
+					exit;
+				}
+			break;
+
+			case 'get_user_calendar':
+				$id_user = $_SESSION["idUser"];
+				if ($test = valider("id_user", "GET")) $id_user = $test;
+				$date = (new DateTime())->modify('monday this week')->format('Y-m-d');
+				if ($test = valider("date", "GET")) $date = $test;
+				$user_calendar = getUserCalendar($id_user, $date);
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($user_calendar);
+				exit;
+			break;
+
+			case 'update_title_calendar':
+				if ($event_id = valider("event_id", "GET"))
+				if ($title = valider("title", "GET")){
+					$data = updateTitleCalendar($event_id, $title);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($data);
+					exit;
+				}
+			break;
+
+			case 'update_description_calendar':
+				if ($event_id = valider("event_id", "GET"))
+				if ($description = valider("description", "GET")){
+					$data = updateDescriptionCalendar($event_id, $description);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($data);
+					exit;
+				}
+			break;
+
+			case 'update_hour_calendar':
+				if ($event_id = valider("event_id", "GET"))
+				if ($heure_debut = valider("heure_debut", "GET"))
+				if ($heure_fin = valider("heure_fin", "GET")){
+					$data = updateHourCalendar($event_id, $heure_debut, $heure_fin);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($data);
+					exit;
+				}
+			break;
+
+			case 'delete_event_calendar':
+				if ($event_id = valider("event_id", "GET")){
+					$data = deleteEventCalendar($event_id);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($data);
+					exit;
+				}
+			break;
+
+			case 'create_event_calendar':
+				$id_user = $_SESSION["idUser"];
+				if ($date_event = valider("date_event", "GET")){
+					$data = createEventCalendar($id_user, $date_event);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($data);
 					exit;
 				}
 			break;
