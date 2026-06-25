@@ -66,6 +66,17 @@ session_start();
 				$_SESSION["connecte"] = false;
 			break;
 
+			case 'delete_account':
+				$id_user = $_SESSION["idUser"];
+				if ($id_user){
+					supprimerUserBdd($id_user);
+				}
+				// On déconnecte l'utilisateur, comme pour logout
+				session_unset();
+				$_SESSION["connecte"] = false;
+				$qs='?view=accueil';
+			break;
+
 			case 'get_groups':
 				$id_user = $_SESSION["idUser"];
 				$groups = getGroups($id_user); 
@@ -226,6 +237,46 @@ session_start();
 				}
 			break;
 
+			case 'save_weather':
+				$id_user = isset($_SESSION["idUser"]) ? $_SESSION["idUser"] : null;
+				$city = valider("city", "GET");
+				if ($id_user && $city){
+					$date        = date("Y-m-d");
+					$country     = valider("country", "GET");
+					$temperature = valider("temperature", "GET");
+					$description = valider("description", "GET");
+					$humidity    = valider("humidity", "GET");
+					$wind_speed  = valider("wind_speed", "GET");
+
+					// Comme pour un pari : si la météo du jour existe déjà pour cette ville,
+					// on la met à jour, sinon on l'enregistre.
+					if (getWeatherDay($id_user, $city, $date)){
+						updateWeatherDay($id_user, $city, $country, $temperature, $description, $humidity, $wind_speed, $date);
+					} else {
+						saveWeatherDay($id_user, $city, $country, $temperature, $description, $humidity, $wind_speed, $date);
+					}
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode(["success" => true]);
+					exit;
+				}
+				// Pas connecté (ou ville manquante) : on ne suit pas l'historique
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode(["success" => false, "reason" => "not_logged_in"]);
+				exit;
+			break;
+
+			case 'get_previous_weather':
+				$id_user = isset($_SESSION["idUser"]) ? $_SESSION["idUser"] : null;
+				$city = valider("city", "GET");
+				$history = ($id_user && $city) ? getPreviousWeather($id_user, $city, date("Y-m-d")) : [];
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($history);
+				exit;
+			break;
+
 			case 'send_friend_request':
 				$id_user = $_SESSION["idUser"];
 				if ($friend_username = valider("friend_username", "GET")){
@@ -279,6 +330,17 @@ session_start();
 				exit;
 			break;
 
+			case 'search_users':
+				$id_user = $_SESSION["idUser"];
+				$term = valider("term", "GET");
+				if (!$term) $term = "";
+				$users = searchUsers($id_user, $term);
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($users);
+				exit;
+			break;
+
 			case 'get_pending_friend_requests':
 				$id_user = $_SESSION["idUser"];
 				$requests = getPendingFriendRequests($id_user);
@@ -321,6 +383,17 @@ session_start();
 					exit;
 				}
 			break;
+
+			case 'leave_group':
+				$id_user = $_SESSION["idUser"];
+				if ($id_group = valider("id_group", "GET")){
+					$ok = leaveGroup($id_user, $id_group);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode(["success" => $ok !== false]);
+					exit;
+				}
+			break;
 		}
 
 	}
@@ -329,7 +402,7 @@ session_start();
 	// On l'extrait donc du chemin du script courant : $_SERVER["PHP_SELF"]
 	// Par exemple, si $_SERVER["PHP_SELF"] vaut /chat/data.php, dirname($_SERVER["PHP_SELF"]) contient /chat
 
-	$urlBase = dirname($_SERVER["PHP_SELF"]) . "/index.php";
+	$urlBase = "/index.php";
 	// On redirige vers la page index avec les bons arguments
 
 	header("Location:" . $urlBase . $qs);

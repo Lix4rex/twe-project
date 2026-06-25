@@ -41,6 +41,8 @@
 }
 
 .group p {
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: 14px;
     font-weight: 500;
     overflow: hidden;
@@ -432,4 +434,107 @@
 
 .table-previous-emotions tbody tr:hover td {
     background: var(--color-background-secondary, #f0efe8);
+}
+/* Bouton "Quitter le groupe" à côté du titre de la conversation */
+.conversation-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.conversation-title .leave-group-btn {
+    margin-left: auto;
+    background-color: #c0392b;
+    color: #fff;
+    border: none;
+    padding: 5px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+.conversation-title .leave-group-btn:hover {
+    background-color: #a93226;
+}
+
+/* ===== BOUTON INFO MÉTÉO + CORRÉLATION HUMEUR/MÉTÉO ===== */
+.info-meteo-btn {
+    margin-left: 10px;
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+.info-meteo-btn:hover {
+    background-color: #21618c;
+}
+
+#correlation-panel {
+    margin-top: 12px;
+}
+.correlation-note {
+    color: #666;
+    font-style: italic;
+    font-size: 13px;
+}
+.correlation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 16px 0;
+}
+.correlation-table th,
+.correlation-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+.correlation-table th {
+    background-color: #f0efe8;
+    font-weight: 600;
+}
+.correlation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+.correlation-chart {
+    position: relative;
+    height: 240px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 8px;
+}
+.correlation-chart .chart-title {
+    margin: 0 0 6px 0;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+}
+.correlation-chart canvas {
+    height: 190px !important;
+}
+
+/* Champ de changement de ville de référence (corrélation) */
+.correlation-city-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+    flex-wrap: wrap;
+}
+.correlation-city-controls #correlation-city-input {
+    padding: 5px 8px;
+}
+.correlation-city-btn {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+.correlation-city-btn:hover {
+    background-color: #21618c;
 }

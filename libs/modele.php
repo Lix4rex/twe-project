@@ -120,12 +120,80 @@ function getPreviousEmotions($id_user, $date){
 	return parcoursRs(SQLSelect($SQL));
 }
 
+/********* HISTORIQUE METEO *********/
+// Même principe que les paris : un enregistrement par (utilisateur, ville, jour).
+
+// Enregistre la météo du jour pour une ville (comme betEmotion enregistre un pari)
+function saveWeatherDay($id_user, $city, $country, $temperature, $description, $humidity, $wind_speed, $date){
+	$id_user = proteger($id_user);
+	$city = proteger($city);
+	$country = proteger($country);
+	$temperature = proteger($temperature);
+	$description = proteger($description);
+	$humidity = proteger($humidity);
+	$wind_speed = proteger($wind_speed);
+	$date = proteger($date);
+	$SQL = "insert into weather_history (user_id, city, country, temperature, description, humidity, wind_speed, date_meteo)
+	        values ('$id_user', '$city', '$country', '$temperature', '$description', '$humidity', '$wind_speed', '$date')";
+	return SQLInsert($SQL);
+}
+
+// Met à jour la météo déjà enregistrée pour ce jour et cette ville (comme updateEmotion)
+function updateWeatherDay($id_user, $city, $country, $temperature, $description, $humidity, $wind_speed, $date){
+	$id_user = proteger($id_user);
+	$city = proteger($city);
+	$country = proteger($country);
+	$temperature = proteger($temperature);
+	$description = proteger($description);
+	$humidity = proteger($humidity);
+	$wind_speed = proteger($wind_speed);
+	$date = proteger($date);
+	$SQL = "update weather_history
+	        set country='$country', temperature='$temperature', description='$description', humidity='$humidity', wind_speed='$wind_speed'
+	        where user_id='$id_user' and city='$city' and date_meteo='$date'";
+	return SQLUpdate($SQL);
+}
+
+// Récupère la météo enregistrée pour un jour donné et une ville (comme getDayBet)
+function getWeatherDay($id_user, $city, $date){
+	$id_user = proteger($id_user);
+	$city = proteger($city);
+	$date = proteger($date);
+	$SQL = "select * from weather_history where user_id='$id_user' and city='$city' and date_meteo='$date'";
+	return parcoursRs(SQLSelect($SQL));
+}
+
+// Récupère l'historique météo des 7 derniers jours pour une ville (comme getPreviousEmotions)
+function getPreviousWeather($id_user, $city, $date){
+	$id_user = proteger($id_user);
+	$city = proteger($city);
+	$date = proteger($date);
+	$SQL = "select * from weather_history where user_id='$id_user' and city='$city' and date_meteo<='$date' order by date_meteo desc limit 7";
+	return parcoursRs(SQLSelect($SQL));
+}
+
 /********* GESTION DES AMIS *********/
 
 // Recherche un utilisateur par son username (recherche exacte, insensible à la casse)
 function getUserByUsername($username){
 	$username = proteger($username);
 	$SQL = "select * from users where username='$username'";
+	return parcoursRs(SQLSelect($SQL));
+}
+
+// Recherche des utilisateurs par prénom ou nom (pour les suggestions d'ajout d'ami).
+// On exclut l'utilisateur courant. Renvoie id, username, first_name, last_name.
+function searchUsers($id_user, $term){
+	$id_user = proteger($id_user);
+	$term = proteger($term);
+	$SQL = "select id, username, first_name, last_name from users
+	        where id <> '$id_user'
+	        and (first_name like '%$term%'
+	             or last_name like '%$term%'
+	             or concat(first_name, ' ', last_name) like '%$term%'
+	             or username like '%$term%')
+	        order by first_name, last_name
+	        limit 10";
 	return parcoursRs(SQLSelect($SQL));
 }
 
@@ -272,6 +340,31 @@ function addFriendToGroup($id_user, $id_group, $friend_id_user){
 	if ($ok === false) return ["success" => false, "error" => "Cet utilisateur est déjà dans le groupe"];
 
 	return ["success" => true];
+}
+
+// Quitte un groupe : retire l'utilisateur de la table group_members
+function leaveGroup($id_user, $id_group){
+	$id_user = proteger($id_user);
+	$id_group = proteger($id_group);
+	$SQL = "delete from group_members where user_id='$id_user' and group_id='$id_group'";
+	return SQLDelete($SQL);
+}
+
+/********* SUPPRESSION DU COMPTE *********/
+
+// Supprime définitivement un utilisateur ainsi que toutes ses données liées.
+// On supprime d'abord les lignes qui référencent l'utilisateur (clés étrangères),
+// puis l'utilisateur lui-même.
+function supprimerUserBdd($id_user){
+	$id_user = proteger($id_user);
+
+	SQLDelete("delete from messages where user_id='$id_user'");
+	SQLDelete("delete from paris where user_id='$id_user' or friend_user_id='$id_user'");
+	SQLDelete("delete from real_emotions where user_id='$id_user'");
+	SQLDelete("delete from friends where user_id='$id_user' or friend_id='$id_user'");
+	SQLDelete("delete from group_members where user_id='$id_user'");
+
+	return SQLDelete("delete from users where id='$id_user'");
 }
 
 ?>

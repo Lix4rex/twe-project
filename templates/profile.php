@@ -20,7 +20,7 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 // rien ici ! 
 </script>
 
-<script src="js/profile.js">
+<script src="js/profile.js?v=2">
 </script>
 
 <div id="corps">
@@ -33,4 +33,8 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 
     <div id="personal-feeling">
     </div>
+</div>
+
+<div id="danger-zone">
+    <input type="submit" id="delete-account-btn" value="Supprimer mon compte" />
 </div>

@@ -20,7 +20,7 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 // rien ici ! 
 </script>
 
-<script src="js/friends.js">
+<script src="js/friends.js?v=2">
 </script>
 
 <div id="corps">
@@ -31,8 +31,9 @@ if (basename($_SERVER["PHP_SELF"]) != "index.php")
 
 	<div id="add-friend-box">
 		<h2>Ajouter un ami</h2>
-		<input type="text" id="friend-username-input" placeholder="Nom d'utilisateur" />
+		<input type="text" id="friend-username-input" placeholder="Nom, prénom ou nom d'utilisateur" autocomplete="off" />
 		<input type="submit" id="add-friend-btn" value="Envoyer une demande" />
+		<div id="friend-suggestions"></div>
 		<p id="add-friend-message"></p>
 	</div>
 

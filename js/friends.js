@@ -18,6 +18,44 @@ var jSentItem = $("<div>")
     .append($("<button>").addClass("btn-cancel-request").html("Annuler"));
 
 
+var searchTimeout = null;
+
+// Recherche d'utilisateurs par nom/prénom et affichage des suggestions
+function searchUsers(term){
+    var box = $("#friend-suggestions");
+
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {"action": "search_users", "term": term},
+        dataType: "json",
+        success: function(oRep){
+            box.empty();
+
+            if (!oRep.length){
+                box.append($("<p>").addClass("empty-msg").html("Aucun utilisateur trouvé."));
+                return;
+            }
+
+            oRep.forEach(function(user){
+                var jSugg = $("<div>")
+                    .addClass("suggestion-item")
+                    .append($("<span>").addClass("suggestion-fullname").html(user.first_name + " " + user.last_name))
+                    .append($("<span>").addClass("suggestion-username").html("@" + user.username));
+                jSugg.click(function(){
+                    // On sélectionne l'utilisateur : son username est mis dans le champ
+                    $("#friend-username-input").val(user.username);
+                    box.empty();
+                });
+                box.append(jSugg);
+            });
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        },
+    });
+}
+
 function sendFriendRequest(username){
     var msgEl = $("#add-friend-message");
     msgEl.html("").removeClass("error success");
@@ -31,6 +69,7 @@ function sendFriendRequest(username){
             if (oRep.success){
                 msgEl.addClass("success").html("Demande envoyée !");
                 $("#friend-username-input").val("");
+                $("#friend-suggestions").empty();
                 display_sent_requests();
             } else {
                 msgEl.addClass("error").html(oRep.error || "Une erreur est survenue");
@@ -208,5 +247,18 @@ $(document).ready(function(){
         if (e.which == 13){
             $("#add-friend-btn").click();
         }
+    });
+
+    // Suggestions : recherche par nom/prénom pendant la saisie
+    $("#friend-username-input").on("input", function(){
+        var term = $(this).val().trim();
+        clearTimeout(searchTimeout);
+        if (term.length < 1){
+            $("#friend-suggestions").empty();
+            return;
+        }
+        searchTimeout = setTimeout(function(){
+            searchUsers(term);
+        }, 250);
     });
 });

@@ -21,9 +21,10 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
 	<title>TWE - MOOD</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="css/conversations.css">
+	<link rel="stylesheet" type="text/css" href="css/conversations.css?v=5">
 	<link rel="stylesheet" type="text/css" href="css/profile.css">
-	<link rel="stylesheet" type="text/css" href="css/friends.css">
+	<link rel="stylesheet" type="text/css" href="css/friends.css?v=2">
+	<link rel="stylesheet" type="text/css" href="css/weather.css?v=6">
 </head>
 <!-- **** F I N **** H E A D **** -->
 
@@ -38,6 +39,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 </div>
 
 <a href="index.php?view=accueil">Accueil</a>
+<a href="index.php?view=weather">Météo</a>
 
 <?php
 // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion 
