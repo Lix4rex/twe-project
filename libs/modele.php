@@ -14,7 +14,11 @@ include_once "libs/maLibSQL.pdo.php";
 
 function getGroups($id_user){
 	$id_user = proteger($id_user);
-	$SQL = "select groups.* from groups join group_members on group_members.group_id=groups.id where group_members.user_id='$id_user'";
+	$SQL = $SQL = "SELECT `groups`.*
+        FROM `groups`
+        JOIN group_members
+        ON group_members.group_id = `groups`.id
+        WHERE group_members.user_id = '$id_user'";
 	return parcoursRs(SQLSelect($SQL));
 }
 
@@ -109,37 +113,37 @@ function getPendingFriendRequests($id_user){
 	$SQL = "
 		SELECT *
 		FROM friends
-		WHERE friend_user_id='$id_user'
+		WHERE friend_id='$id_user'
 		AND status='pending'
 	";
 
 	return parcoursRs(SQLSelect($SQL));
 }
 
-function acceptFriendRequest($user_id, $friend_user_id){
+function acceptFriendRequest($user_id, $friend_id){
 
 	$user_id = proteger($user_id);
-	$friend_user_id = proteger($friend_user_id);
+	$friend_id = proteger($friend_id);
 
 	$SQL = "
 		UPDATE friends
 		SET status='accepted'
 		WHERE user_id='$user_id'
-		AND friend_user_id='$friend_user_id'
+		AND friend_id='$friend_id'
 	";
 
 	return SQLUpdate($SQL);
 }
 
-function rejectFriendRequest($user_id, $friend_user_id){
+function rejectFriendRequest($user_id, $friend_id){
 
 	$user_id = proteger($user_id);
-	$friend_user_id = proteger($friend_user_id);
+	$friend_id = proteger($friend_id);
 
 	$SQL = "
 		DELETE FROM friends
 		WHERE user_id='$user_id'
-		AND friend_user_id='$friend_user_id'
+		AND friend_id='$friend_id'
 	";
 
 	return SQLDelete($SQL);
@@ -155,7 +159,7 @@ function getFriends($id_user){
 		WHERE
 		(
 			user_id='$id_user'
-			OR friend_user_id='$id_user'
+			OR friend_id='$id_user'
 		)
 		AND status='accepted'
 	";
@@ -180,7 +184,18 @@ function searchUsers($username, $id_user){
 
 	return parcoursRs(SQLSelect($SQL));
 }
+function isUserInGroup($id_user, $id_group)
+{
+	$id_user = proteger($id_user);
+	$id_group = proteger($id_group);
 
+	$SQL = "SELECT COUNT(*) 
+			FROM group_members
+			WHERE user_id='$id_user'
+			AND group_id='$id_group'";
+
+	return SQLGetChamp($SQL) > 0;
+}
 function getLeaderboard($id_group){
 
 	$id_group = proteger($id_group);
