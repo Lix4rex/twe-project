@@ -2,22 +2,30 @@
 // Ce fichier permet de tester les fonctions développées dans le fichier bdd.php (première partie)
 
 // Si la page est appelée directement par son adresse, on redirige en passant pas la page index
-if (basename($_SERVER["PHP_SELF"]) == "Leaderboard.php")
+if (basename($_SERVER["PHP_SELF"]) == "leaderboard.php")
 {
-	header("Location:../index.php?view=Leaderboard");
+	header("Location:../index.php?view=leaderboard");
 	die("");
 }
 
-session_start(); //a voir si je garde ca 
+include_once "libs/maLibUtils.php";
+include_once "libs/maLibSQL.pdo.php";
+include_once "libs/maLibSecurisation.php"; 
+include_once "libs/modele.php"; 
 
-$id_user = $_SESSION["id"];
+
+
+$id_user = $_SESSION["idUser"];
 
 $groupes = getGroups($id_user);
 
-include_once("libs/modele.php");
-include_once("libs/maLibUtils.php"); // tprint
 
 ?>
+
+<script src="js/jquery-3.5.1.min.js">
+// rien ici ! 
+</script>
+
 
 <h1>Leaderboard</h1>
 
@@ -25,7 +33,7 @@ include_once("libs/maLibUtils.php"); // tprint
 
 <?php foreach($groupes as $g){ ?>
 	<button onclick="chargerLeaderboard(<?= $g['id'] ?>)">
-		<?= htmlspecialchars($g["nom"]) ?>
+		<?= htmlspecialchars($g["name"]) ?>
 	</button>
 <?php } ?>
 
@@ -35,15 +43,57 @@ include_once("libs/maLibUtils.php"); // tprint
 	Clique sur un groupe
 </div>
 
+<script>
 
+function chargerLeaderboard(idGroup)
+{
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {
+            action: "get_leaderboard",
+            id: idGroup
+        },
+        dataType: "json",
+
+        success: function(joueurs)
+        {
+            let html = "<table>";
+            html += "<tr><th>Rang</th><th>Nom</th><th>Points</th></tr>";
+
+            let rang = 1;
+
+            joueurs.forEach(function(j){
+                html += "<tr>";
+                html += "<td>" + rang + "</td>";
+                html += "<td>" + j.username + "</td>";
+                html += "<td>" + j.points + "</td>";
+                html += "</tr>";
+                rang++;
+            });
+
+            html += "</table>";
+
+            $("#leaderboard").html(html);
+        },
+
+        error: function(xhr, status, error)
+        {
+            console.log("ERROR:", error);
+        }
+    });
+}
+
+</script>
 
 <?php   //pour la liste des groupes 
 
-$id_user = $_SESSION["id"];
-$id_group = intval($_GET["groupe"]);
-
-if(!isUserInGroup($id_user, $id_group)){
-	die("Accès refusé");
+$id_user = $_SESSION["idUser"];
+if(isset($_GET["id"]))
+{
+	$id_group = intval($_GET["id"]);
+	if(!isUserInGroup($id_user, $id_group)){
+		die("Accès refusé");
 }
 
 $joueurs = getLeaderboard($id_group);
@@ -63,5 +113,11 @@ foreach($joueurs as $j){
 }
 
 echo "</table>";
+}
+
+
+
+
+
 
 
