@@ -41,7 +41,6 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";
 </div>
 
 <a href="index.php?view=accueil">Accueil</a>
-<a href="index.php?view=weather">Météo</a>
 
 <?php
 // Si l'utilisateur n'est pas connecte, on affiche un lien de connexion 
@@ -50,6 +49,7 @@ if (!valider("connecte","SESSION")) {
 	echo "<a href=\"index.php?view=register\">Créer un compte</a>";
 }
 else {
+	echo "<a href=\"index.php?view=weather\">Météo</a>";
 	echo "<a href=\"index.php?view=conversations\">Conversations</a>";
 	echo "<a href=\"index.php?view=friends\">Amis</a>";
 	echo "<a href=\"index.php?view=leaderboard\">Leaderboard</a>";

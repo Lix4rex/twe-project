@@ -499,7 +499,7 @@ session_start();
 					}
 				}
 			break;
-			
+
 			case 'leave_group':
 				$id_user = $_SESSION["idUser"];
 				if ($id_group = valider("id_group", "GET")){
@@ -518,7 +518,7 @@ session_start();
 	// On l'extrait donc du chemin du script courant : $_SERVER["PHP_SELF"]
 	// Par exemple, si $_SERVER["PHP_SELF"] vaut /chat/data.php, dirname($_SERVER["PHP_SELF"]) contient /chat
 
-	$urlBase = "/index.php";
+	$urlBase = dirname($_SERVER["PHP_SELF"]) . "/index.php";
 	// On redirige vers la page index avec les bons arguments
 
 	header("Location:" . $urlBase . $qs);
