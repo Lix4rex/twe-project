@@ -368,8 +368,8 @@ function createCalendar(monday) {
             .text("Semaine du " + monday.toLocaleDateString("fr-FR") + " au " + sunday.toLocaleDateString("fr-FR"))
     );
 
-    // ÉLÉMENT 2 : La ligne qui va encapsuler uniquement les 7 colonnes
-    var jDaysGrid = $("<div>").addClass("calendar-grid-days");
+    // ÉLÉMENT 2 : La grille de 7 colonnes (mise à jour du nom de classe pour correspondre au CSS stable)
+    var jDaysGrid = $("<div>").addClass("calendar-grid");
 
     for (let i = 0; i < 7; i++) {
         let current = new Date(monday);
@@ -395,15 +395,20 @@ function createCalendar(monday) {
 }
 
 function display_calendar(monday = currentMonday) {
-    var calendar_div = $("#calendar");
-    calendar_div.empty();
+    // Ciblage du conteneur de structure (l'enveloppe à 82%)
+    var calendar_section = $("#calendar-section");
+    calendar_section.empty();
+
+    // Recréation de la boîte blanche isolée comme dans l'autre module
+    var calendar_box = $("<div>").attr("id", "calendar");
 
     var controls = $("<div>")
         .addClass("calendar-controls")
         .append(jPreviousWeekBtn.clone(true))
         .append(jNextWeekBtn.clone(true));
 
-    calendar_div.append(controls);
+    // On injecte les contrôles dans le bloc blanc
+    calendar_box.append(controls);
 
     var jCloneCalendar = createCalendar(monday);
 
@@ -417,7 +422,6 @@ function display_calendar(monday = currentMonday) {
         dataType: "json",
         success: function(oRep) {
             oRep.forEach(function(event) {
-                // Va chercher la colonne du jour précis à l'intérieur de la grille
                 var dayDiv = jCloneCalendar.find(".calendar-day[data-date='" + event.date_event + "']");
 
                 if (!dayDiv.length) return;
@@ -437,7 +441,9 @@ function display_calendar(monday = currentMonday) {
                         .append(jDayButton.clone(true))
                 );
             });
-            calendar_div.append(jCloneCalendar);
+            // On ajoute le calendrier dans le bloc blanc, puis le bloc blanc dans la section de structure
+            calendar_box.append(jCloneCalendar);
+            calendar_section.append(calendar_box);
         },
         error: function(xhr, status, error){
             console.log("ERROR: ", error);

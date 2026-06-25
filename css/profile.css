@@ -14,14 +14,21 @@
 }
 
 #calendar_main_box h2,
-#calendar-section h2,
-#calendar h2 {
+#calendar-section h2 {
     font-size: 1.1rem;
     color: #2d3748;
     margin-top: 0;
     margin-bottom: 15px;
     border-left: 4px solid #4a90e2;
     padding-left: 10px;
+}
+
+#profile-sidebar{
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+    flex: 0 0 18%; 
+    min-width: 220px;
 }
 
 /* --- SIDEBAR GAUCHE (18%) --- */
@@ -36,9 +43,14 @@
 }
 
 /* --- ZONE CALENDRIER DROITE (82%) --- */
-#calendar-section,
-#calendar {
+#calendar-section {
     flex: 0 0 82%;
+    box-sizing: border-box;
+    min-width: 0; /* Empêche Flexbox de casser lors des zooms agressifs */
+}
+
+/* Boîte blanche interne qui contient tout le calendrier */
+#calendar {
     background-color: #ffffff;
     border-radius: 12px;
     padding: 25px;
@@ -47,8 +59,174 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
+/* Navigation de la semaine */
+.calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.calendar-controls input[type="submit"] {
+    background-color: #4a90e2; 
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.calendar-controls input[type="submit"]:hover {
+    background-color: #357abd; 
+}
+
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.calendar-week-title {
+    text-align: center;
+    color: #2d3748;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+/* --- LA GRILLE DE 7 COLONNES ALIGNÉES --- */
+.calendar-grid {
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+}
+
+.calendar-day {
+    flex: 1;
+    min-width: 0;
+    height: 480px; 
+    overflow-y: auto;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+/* Scrollbar discrète */
+.calendar-day::-webkit-scrollbar {
+    width: 5px;
+}
+.calendar-day::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.calendar-day-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #4a5568;
+    text-transform: capitalize;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 6px;
+}
+
+.add-event-button {
+    background-color: #4cbd96;
+    color: #ffffff;
+    border: none;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background-color 0.15s;
+}
+
+.add-event-button:hover {
+    background-color: #3ca37e;
+}
+
+/* --- CARTES ÉVÉNEMENTS --- */
+.calendar-event {
+    background-color: #ffffff;
+    border-left: 3px solid #4a90e2;
+    border-top: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.calendar-event-title {
+    font-weight: 600;
+    color: #2d3748;
+    word-break: break-word;
+}
+
+.calendar-event-title:hover,
+.calendar-event-time:hover,
+.calendar-event-description:hover {
+    cursor: pointer;
+    border: 1px dotted black;
+}
+
+.calendar-event-time {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #4a90e2;
+    background-color: #e8f0fe;
+    padding: 2px 6px;
+    border-radius: 4px;
+    align-self: flex-start;
+}
+
+.calendar-event-description {
+    font-size: 0.8rem;
+    color: #718096;
+    line-height: 1.3;
+}
+
+.calendar-event input[type="submit"] {
+    align-self: flex-end;      
+    margin-top: auto;          
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: #fff5f5;
+    color: #e53e3e;
+    border: 1px solid #fed7d7;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calendar-event input[type="submit"]:hover {
+    background-color: #e53e3e;
+    color: #ffffff;
+    border-color: #e53e3e;
+}
+
 /* ==========================================================================
-   1. EN-TÊTE DU PROFIL (NOM & HUMEUR)
+   EN-TÊTE DU PROFIL & AUTRES BOUTONS (Inchangés mais gardés pour cohérence)
    ========================================================================== */
 .user-badge-container {
     background-color: #ffffff;
@@ -101,261 +279,8 @@
     text-align: center;
 }
 
-.emotions-inline {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 100%;
-}
-
-.emotion-inline-item {
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s;
-}
-
-.emotion-inline-item:hover {
-    background-color: #edf2f7;
-}
-
-.emotion-inline-item input[type="radio"] {
-    margin: 0;
-    cursor: pointer;
-}
-
-.submit-mood-btn {
-    background-color: #4a90e2;
-    color: #ffffff;
-    border: none;
-    padding: 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.2s;
-}
-
-.submit-mood-btn:hover {
-    background-color: #357abd;
-}
-
-/* ==========================================================================
-   2. COMMANDES ET STRUCTURE DU CALENDRIER
-   ========================================================================== */
-.calendar-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 25px;
-}
-
-.calendar-controls input[type="submit"] {
-    background-color: #4a90e2; 
-    color: #ffffff;
-    border: none;
-    padding: 10px 18px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.15s;
-}
-
-.calendar-controls input[type="submit"]:hover {
-    background-color: #357abd; 
-}
-
-.calendar-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.calendar-week-title {
-    text-align: center;
-    color: #2d3748;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 25px;
-    width: 100%;
-}
-
-/* --- LA GRILLE DE 7 COLONNES ALIGNÉES --- */
-.calendar-grid-days {
-    display: flex;
-    flex-direction: row; 
-    justify-content: space-between;
-    align-items: stretch;
-    gap: 12px;
-    width: 100%;
-}
-
-.calendar-day {
-    flex: 1;
-    min-width: 140px; 
-    height: 480px; 
-    overflow-y: auto;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    box-sizing: border-box;
-}
-
-.calendar-day::-webkit-scrollbar {
-    width: 5px;
-}
-.calendar-day::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
-    border-radius: 4px;
-}
-
-.calendar-day-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #4a5568;
-    text-transform: capitalize;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 6px;
-}
-
-.add-event-button {
-    background-color: #4cbd96;
-    color: #ffffff;
-    border: none;
-    padding: 4px 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    align-self: flex-start;
-    transition: background-color 0.15s;
-}
-
-.add-event-button:hover {
-    background-color: #3ca37e;
-}
-
-/* ==========================================================================
-   3. CARTES ÉVÉNEMENTS & ET ZONES DE TEXTE (EDITION)
-   ========================================================================== */
-.calendar-event {
-    background-color: #ffffff;
-    border-left: 3px solid #4a90e2;
-    border-top: 1px solid #e2e8f0;
-    border-right: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    border-radius: 6px;
-    padding: 8px;
-    font-size: 0.85rem;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    box-sizing: border-box;
-    
-    /* Empêche complètement la boîte de déborder horizontalement */
-    height: auto;
-    min-height: min-content;
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.calendar-event-title {
-    font-weight: 600;
-    color: #2d3748;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-.calendar-event-description {
-    font-size: 0.8rem;
-    color: #718096;
-    line-height: 1.3;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-.calendar-event-title:hover,
-.calendar-event-time:hover,
-.calendar-event-description:hover {
-    cursor: pointer;
-    outline: 1px dotted #000000;
-}
-
-/* CORRECTIF SÉCURITÉ : Règle pour contrôler le textarea d'édition dynamique */
-.calendar-event textarea {
-    width: 100%;
-    max-width: 100%;
-    min-width: 100%;
-    box-sizing: border-box;
-    font-family: inherit;
-    font-size: inherit;
-    padding: 4px;
-    border: 1px solid #4a90e2;
-    border-radius: 4px;
-    resize: vertical; /* Permet uniquement un ajustement vertical si nécessaire */
-    height: 45px;
-    white-space: normal;
-    overflow-wrap: anywhere;
-}
-
-.calendar-event-time {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #4a90e2;
-    background-color: #e8f0fe;
-    padding: 2px 6px;
-    border-radius: 4px;
-    align-self: flex-start;
-    max-width: 100%;
-    box-sizing: border-box;
-    white-space: nowrap;
-}
-
-.calendar-event input[type="submit"] {
-    position: static;          
-    align-self: flex-end;      
-    margin-top: auto;          
-    padding: 4px 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    background-color: #fff5f5;
-    color: #e53e3e;
-    border: 1px solid #fed7d7;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.calendar-event input[type="submit"]:hover {
-    background-color: #e53e3e;
-    color: #ffffff;
-    border-color: #e53e3e;
-}
-
-/* ==========================================================================
-   4. BOUTON SUPPRESSION DU COMPTE
-   ========================================================================== */
 #delete-account-btn {
     display: block;
-    justify-content: center;
     width: 100%;
     background-color: #fff5f5; 
     color: #e53e3e;            
@@ -374,4 +299,70 @@
     background-color: #e53e3e; 
     color: #ffffff;            
     border-color: #e53e3e;
+}
+
+/* --- FORMULAIRE DE SÉLECTION DE L'HUMEUR --- */
+.emotions-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Style de chaque ligne / étiquette d'émotion */
+.emotion-inline-item {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: #4a5568;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.15s ease-in-out;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+/* Effet survol */
+.emotion-inline-item:hover {
+    background-color: #edf2f7;
+    border-color: #cbd5e0;
+    color: #2d3748;
+}
+
+/* Alignement et curseur du bouton radio */
+.emotion-inline-item input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: #4a90e2; /* Colore le bouton radio s'il est coché */
+}
+
+/* Bouton de soumission de l'humeur */
+.submit-mood-btn {
+    background-color: #4a90e2;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 5px;
+    transition: background-color 0.15s ease-in-out, transform 0.1s;
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+}
+
+.submit-mood-btn:hover {
+    background-color: #357abd;
+}
+
+.submit-mood-btn:active {
+    transform: scale(0.98);
 }
