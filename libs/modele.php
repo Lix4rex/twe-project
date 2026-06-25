@@ -30,13 +30,6 @@ function getGroupUsers($id_group){
 	return parcoursRs(SQLSelect($SQL));
 }
 
-function getGroupsTwoUsers($id_user_1, $id_user_2){
-	$id_user_1 = proteger($id_user_1);
-	$id_user_2 = proteger($id_user_2);
-	$SQL = "select gm1.group_id from group_members gm1 join group_members gm2 on gm1.group_id = gm2.group_id where gm1.user_id='$id_user_1' and gm2.user_id='$id_user_2';";
-	return parcoursRs(SQLSelect($SQL));
-}
-
 function getUser($id_user){
 	$id_user = proteger($id_user);
 	$SQL = "select * from users where id='$id_user'";
@@ -81,11 +74,12 @@ function creerUserBdd($first_name, $last_name, $username, $password){
 	return SQLInsert($SQL);
 }
 
-function betEmotion($id_user, $friend_id_user, $emotion, $date){
+function betEmotion($id_user, $friend_id_user, $emotion, $date, $id_group){
 	$id_user = proteger($id_user);
 	$friend_id_user = proteger($friend_id_user);
 	$emotion = proteger($emotion);
-	$SQL = "insert into paris (user_id, friend_user_id, emotion, date_pari) values ('$id_user', '$friend_id_user', '$emotion', '$date');";
+	$id_group = proteger($id_group);
+	$SQL = "insert into paris (user_id, friend_user_id, emotion, date_pari, id_group) values ('$id_user', '$friend_id_user', '$emotion', '$date', '$id_group');";
 	return SQLInsert($SQL);
 }
 
@@ -106,6 +100,14 @@ function getDayBet($id_user, $friend_id_user, $date){
 	return parcoursRs(SQLSelect($SQL));
 }
 
+function getBetOnUser($id_user, $friend_id_user){
+	$id_user = proteger($id_user);
+	$friend_id_user = proteger($friend_id_user);
+	
+	$SQL = "select * from paris where user_id='$id_user' and friend_user_id='$friend_id_user';";
+	return parcoursRs(SQLSelect($SQL));
+}
+
 function setEmotion($id_user, $emotion){
 	$id_user = proteger($id_user);
 	$emotion = proteger($emotion);
@@ -113,11 +115,6 @@ function setEmotion($id_user, $emotion){
 	return SQLInsert($SQL);
 }
 
-function getBetOnUser($id_user){
-	$id_user = proteger($id_user);
-	$SQL = "select * from paris where user_id='$id_user';";
-	return parcoursRs(SQLSelect($SQL));
-}
 
 function setPoints($id_user, $id_group, $points){
 	$id_user = proteger($id_user);

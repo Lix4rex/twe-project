@@ -56,12 +56,12 @@ function sendMessage(id_group, message){
     });
 }
 
-function betEmotion(friend_id_user, emotion){
+function betEmotion(friend_id_user, emotion, id_group){
     $.ajax({
         type: "GET",
         url: "controleur.php",
         //headers: {"debug-data":true},
-        data: {"action": "send_day_bet", "friend_id_user": friend_id_user, "emotion": emotion},
+        data: {"action": "send_day_bet", "friend_id_user": friend_id_user, "emotion": emotion, "id_group": id_group},
         dataType: "json",
         success: function(oRep){
             console.log(oRep);
@@ -239,7 +239,7 @@ function display_betting_panel(friend_id_user, username, firstname, lastname){
                         alert("Il faut choisir une émotion pour parier")
                         return;
                     }
-                    if ($(this).val() == "Parier pour demain") betEmotion(friend_id_user, selectedEmotion);
+                    if ($(this).val() == "Parier pour demain") betEmotion(friend_id_user, selectedEmotion, id_group);
                     else updateEmotion(friend_id_user, selectedEmotion);
 
                     display_betting_panel(friend_id_user, username, firstname, lastname);

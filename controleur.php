@@ -107,19 +107,8 @@ session_start();
 				}
 			break;
 
-			case 'get_group_two_users':
-				$id_user_1 = $_SESSION["idUser"];
-				if ($id_user_2 = valider("id_user", "GET")){
-					$groups = getGroupsTwoUsers($id_user_1, $id_user_2);
-					ob_clean();
-					header("Content-Type: application/json");
-					echo json_encode($groups);
-					exit;
-				}
-			break;
-
 			case 'set_points':
-				if ($id_user = valider("id_user", "GET"))
+				$id_user = $_SESSION["idUser"];
 				if ($id_group = valider("id_group", "GET"))
 				if ($points = valider("points", "GET")){
 					$data = setPoints($id_user, $id_group, $points);
@@ -197,9 +186,10 @@ session_start();
 				
 				$id_user = $_SESSION["idUser"];
 				if ($friend_id_user = valider("friend_id_user", "GET"))
+				if ($id_group = valider("id_group", "GET"))
 				if ($emotion = valider("emotion", "GET")){
 					$date = (new DateTime('tomorrow'))->format('Y-m-d');
-					betEmotion($id_user, $friend_id_user, $emotion, $date);
+					betEmotion($id_user, $friend_id_user, $emotion, $date, $id_group);
 					ob_clean();
 					header("Content-Type: application/json");
 					echo json_encode([
@@ -226,13 +216,13 @@ session_start();
 
 			case 'get_bet_on_user':
 				$id_user = $_SESSION["idUser"];
-				if ($test = valider("id_user", "GET")) $id_user = $test;
-				$bets = getBetOnUser($id_user);
-				ob_clean();
-				header("Content-Type: application/json");
-				echo json_encode($bets);
-				exit;
-
+				if ($friend_id_user = valider("friend_id_user", "GET")){
+					$bets = getBetOnUser($id_user, $friend_id_user);
+					ob_clean();
+					header("Content-Type: application/json");
+					echo json_encode($bets);
+					exit;
+				}
 			break;
 
 			case 'set_day_emotion':

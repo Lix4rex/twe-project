@@ -262,6 +262,87 @@ function majPointsBets() {
     });
 }
 
+function majPointsBetsV2(){
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {action: "get_groups"},
+        dataType: "json",
+        success: function(groups){
+            groups.forEach(function(group){
+                $.ajax({
+                    type: "GET",
+                    url: "controleur.php",
+                    data: {action : "get_group_users", id_group: group.id},
+                    dataType: "json",
+                    success: function(members){
+                        
+                        async function calculerPoints() {
+                            var points = 0;
+
+                            for (const member of members) {
+                                try {
+                                    var bets = await $.ajax({
+                                        type: "GET",
+                                        url: "controleur.php",
+                                        data: { action: "get_bet_on_user", friend_id_user: member.user_id },
+                                        dataType: "json"
+                                    });
+
+                                    for (const bet of bets) {
+                                        var true_emotion = await $.ajax({
+                                            type: "GET",
+                                            url: "controleur.php",
+                                            data: {
+                                                action: "get_day_emotion",
+                                                date_bet: bet.date_pari,
+                                                id_user: bet.friend_user_id
+                                            },
+                                            dataType: "json"
+                                        });
+
+                                        if (true_emotion.length <= 0) continue;
+                                        true_emotion = true_emotion[0];
+                                        
+                                        if (true_emotion && bet.emotion === true_emotion.emotion) {
+                                            points += 1;
+                                        }
+                                    }
+
+                                } catch (err) {
+                                    console.log("Erreur lors du calcul d'un membre :", err);
+                                }
+                            }
+                            
+                            $.ajax({
+                                type: "GET",
+                                url: "controleur.php",
+                                data: {"action": "set_points", "id_group": group.id, "points": points},
+                                dataType: "json",
+                                success: function(oRep){
+                                    console.log(oRep);
+                                },
+                                error: function(xhr, status, error){
+                                    console.log("ERROR", error);
+                                }
+                            });
+                            console.log("Groupe " + group.name + " : " + points + " points au total");
+                        }
+
+                        calculerPoints();
+                    },
+                    error: function(xhr, status, error){
+                        console.log("ERROR membres: ", error);
+                    }
+                });
+            });
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR groupes: ", error);
+        }
+    });
+}
+
 function setDayEmotion(emotion){
     $.ajax({
         type: "GET",
@@ -460,7 +541,7 @@ $(document).on("click", "#delete-account-btn", function(){
 $(document).ready(function(){
     display_user_header();
     display_calendar();
-    majPointsBets();
+    majPointsBetsV2();
 });
 
 $(document).on("keyup", "textarea", function (context) {
