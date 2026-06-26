@@ -1,0 +1,16 @@
+Procédure d'installation
+
+Placer ce dossier dans /var/www/html/'chemin/vers/un/sous/dossier'
+
+Importer le fichier mood-game.sql contenant des données d'un environnement de test.
+
+On y retrouve 4 utilisateurs dont le mot de passe est "test" pour tous : 'Lix4rex', 'isma', 'carlos' et 'martin'
+Ils sont tous amis entre eux, ont deux ou un seul groupe. Ils ont discuté dans ces groupes.
+Chacun a rempli son calendrier (de manière minimale). Ce ne sont que des données de test.
+Il y a un historique de pari sur les 3 dernières semaines
+
+Modifier le fichier config.php pour intégrer l'host, le user, le mdp et le nom de la base
+
+Si tout se passe bien, le site devrait se lancer.
+
+Bonne navigation :)
