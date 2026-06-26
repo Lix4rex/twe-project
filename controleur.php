@@ -66,6 +66,15 @@ session_start();
 				$_SESSION["connecte"] = false;
 			break;
 
+			case 'get_users':
+				$groups = getUsers(); 
+				// On répond en JSON et on arrête le script ici
+				ob_clean();
+				header("Content-Type: application/json");
+				echo json_encode($groups);
+				exit;
+			break;
+
 			case 'delete_account':
 				$id_user = $_SESSION["idUser"];
 				if ($id_user){
@@ -79,6 +88,7 @@ session_start();
 
 			case 'get_groups':
 				$id_user = $_SESSION["idUser"];
+				if ($test = valider("id_user", "GET")) $id_user = $test;
 				$groups = getGroups($id_user); 
 				// On répond en JSON et on arrête le script ici
 				ob_clean();
@@ -108,7 +118,7 @@ session_start();
 			break;
 
 			case 'set_points':
-				$id_user = $_SESSION["idUser"];
+				if ($id_user = valider("id_user", "GET"))
 				if ($id_group = valider("id_group", "GET"))
 				if ($points = valider("points", "GET")){
 					$data = setPoints($id_user, $id_group, $points);
@@ -215,7 +225,7 @@ session_start();
 			break;
 
 			case 'get_bet_on_user':
-				$id_user = $_SESSION["idUser"];
+				if ($id_user = valider("id_user", "GET"))
 				if ($friend_id_user = valider("friend_id_user", "GET")){
 					$bets = getBetOnUser($id_user, $friend_id_user);
 					ob_clean();

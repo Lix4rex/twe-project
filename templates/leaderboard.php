@@ -128,6 +128,90 @@ function chargerLeaderboard(idGroup)
         }
     });
 }
+
+
+
+async function majPointsBets(id_user){
+    var groups = await $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {action: "get_groups", id_user: id_user},
+        dataType: "json"
+    });
+
+    for (const group of groups) {
+
+        var members = await $.ajax({
+            type: "GET",
+            url: "controleur.php",
+            data: {action : "get_group_users", id_group: group.id},
+            dataType: "json"
+        });
+
+        var points = 0;
+
+        for (const member of members) {
+            try {
+                var bets = await $.ajax({
+                    type: "GET",
+                    url: "controleur.php",
+                    data: { action: "get_bet_on_user", friend_id_user: member.user_id, id_user: id_user},
+                    dataType: "json"
+                });
+
+                for (const bet of bets) {
+                    var true_emotion = await $.ajax({
+                        type: "GET",
+                        url: "controleur.php",
+                        data: {
+                            action: "get_day_emotion",
+                            date_bet: bet.date_pari,
+                            id_user: bet.friend_user_id
+                        },
+                        dataType: "json"
+                    });
+
+                    if (true_emotion.length <= 0) continue;
+                    true_emotion = true_emotion[0];
+                    
+                    if (true_emotion && bet.emotion === true_emotion.emotion) {
+                        points += 1;
+                    }
+                }
+
+            } catch (err) {
+                console.log("Erreur lors du calcul d'un membre :", err);
+            }
+        }
+
+        console.log("Groupe " + group.name + "(" + group.id + ")" + " : " + points + " points au total pour " + id_user);
+        var oRep = await $.ajax({
+            type: "GET",
+            url: "controleur.php",
+            data: {"action": "set_points", "id_group": group.id, "points": points, "id_user": id_user},
+            dataType: "json"
+        });
+        console.log("fin : " + oRep);
+    }
+}
+
+
+$(document).ready(function(){
+    $.ajax({
+        type: "GET",
+        url: "controleur.php",
+        data: {action: "get_users"},
+        success: function(users){
+            users.forEach(function(user){
+                majPointsBets(user.id);
+            })
+        },
+        error: function(xhr, status, error){
+            console.log("ERROR: ", error);
+        }
+    })
+});
+
 </script>
 
 <style>

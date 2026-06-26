@@ -11,6 +11,10 @@ include_once "libs/maLibSQL.pdo.php";
 
 // inclure ici la librairie faciliant les requêtes SQL (en veillant à interdire les inclusions multiples)
 
+function getUsers(){
+	$SQL = "select * from users;";
+	return parcoursRs(SQLSelect($SQL));
+}
 
 function getGroups($id_user){
 	$id_user = proteger($id_user);
