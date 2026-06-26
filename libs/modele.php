@@ -5,7 +5,7 @@ Dans ce fichier, on définit diverses fonctions permettant de récupérer des do
 */
 
 
-/********* EXERCICE 2 : prise en main de la base de données *********/
+
 
 include_once "libs/maLibSQL.pdo.php";
 
@@ -142,7 +142,7 @@ function getPreviousEmotions($id_user, $date){
 	return parcoursRs(SQLSelect($SQL));
 }
 
-/********* HISTORIQUE METEO *********/
+
 // Même principe que les paris : un enregistrement par (utilisateur, ville, jour).
 
 // Enregistre la météo du jour pour une ville (comme betEmotion enregistre un pari)
@@ -295,7 +295,7 @@ function getSentFriendRequests($id_user){
 	return parcoursRs(SQLSelect($SQL));
 }
 
-/********* GESTION DES GROUPES ENTRE AMIS *********/
+
 
 // Vérifie que $id_user et $friend_id_user sont bien amis (relation acceptée)
 function areFriends($id_user, $friend_id_user){
@@ -450,7 +450,6 @@ function leaveGroup($id_user, $id_group){
 	return SQLDelete($SQL);
 }
 
-/********* SUPPRESSION DU COMPTE *********/
 
 // Supprime définitivement un utilisateur ainsi que toutes ses données liées.
 // On supprime d'abord les lignes qui référencent l'utilisateur (clés étrangères),

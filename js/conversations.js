@@ -552,12 +552,6 @@ $(document).ready(function(){
 
 
 
-// ====================================================================
-//  CORRÉLATION HUMEUR / MÉTÉO (bouton "Info météo" d'un membre)
-//  Aide aux pronostics : on croise les humeurs passées de l'ami
-//  (table real_emotions) avec la météo des mêmes jours (Open-Meteo).
-// ====================================================================
-
 // Ville de référence pour la météo (modifiable via le champ dédié). Au départ : Lille.
 var meteoRefLat = 50.63;
 var meteoRefLon = 3.06;

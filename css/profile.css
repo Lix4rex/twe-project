@@ -1,6 +1,4 @@
-/* ==========================================================================
-   MODULE : PROFIL & CALENDRIER PERSO (STRUCTURE EN LARGEUR MAXIMALE)
-   ========================================================================== */
+
 #calendar_main_box,
 .main-profile-layout {
     display: flex;
@@ -31,7 +29,7 @@
     min-width: 220px;
 }
 
-/* --- SIDEBAR GAUCHE (18%) --- */
+/* --- SIDEBAR GAUCHE--- */
 #profile {
     flex: 0 0 18%;
     min-width: 220px;
@@ -42,11 +40,11 @@
     box-sizing: border-box;
 }
 
-/* --- ZONE CALENDRIER DROITE (82%) --- */
+/* --- ZONE CALENDRIER DROITE --- */
 #calendar-section {
     flex: 0 0 82%;
     box-sizing: border-box;
-    min-width: 0; /* Empêche Flexbox de casser lors des zooms agressifs */
+    min-width: 0; 
 }
 
 /* Boîte blanche interne qui contient tout le calendrier */
@@ -225,9 +223,6 @@
     border-color: #e53e3e;
 }
 
-/* ==========================================================================
-   EN-TÊTE DU PROFIL & AUTRES BOUTONS (Inchangés mais gardés pour cohérence)
-   ========================================================================== */
 .user-badge-container {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
@@ -340,7 +335,7 @@
     cursor: pointer;
     width: 16px;
     height: 16px;
-    accent-color: #4a90e2; /* Colore le bouton radio s'il est coché */
+    accent-color: #4a90e2; 
 }
 
 /* Bouton de soumission de l'humeur */
@@ -367,9 +362,7 @@
     transform: scale(0.98);
 }
 
-/* =========================
-   DIALOG JQUERY UI
-   ========================= */
+
 
 .ui-dialog {
     border-radius: 10px;
@@ -384,10 +377,6 @@
     border-radius: 6px;
     cursor: pointer;
 }
-
-/* =========================
-   TIMEPICKER
-   ========================= */
 
 .ui-timepicker-container {
     z-index: 10000 !important;

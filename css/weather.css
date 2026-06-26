@@ -1,12 +1,9 @@
-/* ==========================================================================
-   MODULE MÉTÉO
-   ========================================================================== */
+
 #weather-box {
     background-color: #ffffff;
     border-radius: 12px;
     padding: 20px;
     box-sizing: border-box;
-    /* AJOUT : Marges sur les côtés (20px) et centrage si la largeur est limitée */
     margin: 0 auto; 
     width: 80%; 
 }
@@ -16,13 +13,11 @@
     gap: 10px;
     margin-bottom: 25px;
     align-items: flex-start;
-    /* MODIFICATION : Centré horizontalement et limité à 50% de la largeur */
     width: 50%;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Permet à l'input de prendre toute la place restante dans les 50% et sert de repère pour les suggestions */
 .search-input-wrapper {
     flex: 1;
     position: relative;
@@ -54,7 +49,7 @@
     background-color: #357abd;
 }
 
-/* Menu déroulant des suggestions (flottant sous l'input de 50%) */
+/* Menu déroulant des suggestions */
 #weather-suggestions {
     position: absolute;
     top: 100%;

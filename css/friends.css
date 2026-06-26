@@ -1,6 +1,4 @@
-/* ==========================================================================
-   MODULE GESTION DES AMIS
-   ========================================================================== */
+
 #friends-main-box {
     background-color: #ffffff;
     border-radius: 12px;
@@ -22,7 +20,7 @@
     padding-left: 10px;
 }
 
-/* Zone de recherche (Alignée et restreinte à 50%) */
+/* Zone de recherche  */
 #add-friend-box {
     margin-bottom: 35px;
 }
@@ -115,9 +113,6 @@
 #add-friend-message.error { color: #e53e3e; }
 #add-friend-message.success { color: #38a169; }
 
-/* ==========================================================================
-   AFFICHAGE DES LISTES ET CARTES (Layout en colonnes)
-   ========================================================================== */
 .friends-lists-grid {
     display: flex;
     flex-direction: column;
@@ -138,7 +133,7 @@
     margin: 5px 0 0 0;
 }
 
-/* Structure des lignes d'utilisateurs (Amis, requêtes reçues/envoyées) */
+/* Structure des lignes d'utilisateurs */
 .friend-item, .request-item, .sent-item {
     display: flex;
     align-items: center;
@@ -171,9 +166,6 @@
     font-weight: 600;
 }
 
-/* ==========================================================================
-   STYLE DES BOUTONS DES COMPOSANTS
-   ========================================================================== */
 .btn-remove-friend, .btn-reject-request, .btn-cancel-request, .btn-accept-request {
     padding: 6px 12px;
     font-size: 0.85rem;

@@ -1,6 +1,4 @@
-/* ==========================================================================
-   STRUCTURE PRINCIPALE (MESSAGERIE & GROUPES)
-   ========================================================================== */
+
 #main_box {
     display: flex;
     flex-direction: row;
@@ -12,7 +10,7 @@
     align-items: flex-start;
 }
 
-/* --- LISTE DES GROUPES (A GAUCHE - 25%) --- */
+/* --- LISTE DES GROUPES --- */
 #groups {
     flex: 0 0 15%;
     min-width: 280px;
@@ -89,7 +87,7 @@
     cursor: pointer;
 }
 
-/* --- ZONE DE CONVERSATION ACTIVED (A DROITE - 75%) --- */
+/* --- ZONE DE CONVERSATION ACTIVED --- */
 #conversation {
     flex: 0 0 75%;
     background-color: #ffffff;
@@ -99,7 +97,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    height: 700px; /* Fixe la hauteur pour garder un layout stable */
+    height: 700px; 
 }
 
 .conversation-title {
@@ -124,14 +122,11 @@
     flex-direction: row;
     gap: 20px;
     flex: 1;
-    min-height: 0; /* Important pour le scroll interne */
+    min-height: 0; 
     margin-top: 15px;
     margin-bottom: 15px;
 }
 
-/* ==========================================================================
-   2. ZONE DES MESSAGES (BULLES DE CHAT)
-   ========================================================================== */
 .messages {
     flex: 1;
     overflow-y: auto;
@@ -204,9 +199,6 @@
     box-sizing: border-box;
 }
 
-/* ==========================================================================
-   3. MEMBRES DU GROUPE, PARIS & CORRÉLATION MÉTÉO (PANEL DROIT)
-   ========================================================================== */
 .conversation-users {
     flex: 0 0 280px; /* Largeur fixe pour le volet d'actions */
     border-left: 1px solid #edf2f7;
@@ -330,7 +322,7 @@
 
 .correlation-chart {
     position: relative;
-    height: 200px; /* Hauteur obligatoire pour Chart.js avec maintainAspectRatio: false */
+    height: 200px; 
     width: 100%;
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -364,9 +356,7 @@
     background: #f8fafc;
 }
 
-/* ==========================================================================
-   4. DESIGN DES UTILITAIRES ET BOUTONS
-   ========================================================================== */
+
 input[type="submit"],
 input[type="button"],
 .info-meteo-btn,

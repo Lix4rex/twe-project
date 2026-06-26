@@ -5,9 +5,7 @@ var jFriendItem = $("<div>")
     .append($("<span>").addClass("calendar-friend-fullname"));
 
 
-/* =========================
-   DATE HELPERS
-========================= */
+
 
 function getMonday(date) {
     let d = new Date(date);
@@ -28,9 +26,6 @@ var currentMonday = getMonday(new Date());
 var currentFriendId = null;
 
 
-/* =========================
-   CALENDRIER STRUCTURE
-========================= */
 
 function createCalendar(monday) {
     // Conteneur général
@@ -85,9 +80,7 @@ function createCalendar(monday) {
 }
 
 
-/* =========================
-   NAVIGATION SEMAINE
-========================= */
+
 
 var jPreviousWeekBtn = $("<input type='button'>")
     .attr("id", "previous-week")
@@ -113,9 +106,7 @@ function reload_calendar() {
 }
 
 
-/* =========================
-   FRIENDS
-========================= */
+
 
 function display_friends() {
 
@@ -163,9 +154,6 @@ function display_friends() {
 }
 
 
-/* =========================
-   CALENDRIER AMI
-========================= */
 
 function display_friend_calendar(friendId, monday = currentMonday) {
 
@@ -238,9 +226,7 @@ function display_friend_calendar(friendId, monday = currentMonday) {
 }
 
 
-/* =========================
-   INIT
-========================= */
+
 
 $(document).ready(function() {
     display_friends();

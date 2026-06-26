@@ -20,15 +20,6 @@ session_start();
 		// si on utilise des actions comportant des accents... 
 		// A EVITER si on ne maitrise pas ce type de problématiques
 
-		/* TODO: exercice 4
-		// Dans tous les cas, il faut etre logue... 
-		// Sauf si on veut se connecter (action == Connexion)
-
-		if ($action != "Connexion") 
-			securiser("login");
-		*/
-
-		// Un paramètre action a été soumis, on fait le boulot...
 		switch($action)
 		{
 
@@ -513,10 +504,6 @@ session_start();
 		}
 
 	}
-
-	// On redirige toujours vers la page index, mais on ne connait pas le répertoire de base
-	// On l'extrait donc du chemin du script courant : $_SERVER["PHP_SELF"]
-	// Par exemple, si $_SERVER["PHP_SELF"] vaut /chat/data.php, dirname($_SERVER["PHP_SELF"]) contient /chat
 
 	$urlBase = dirname($_SERVER["PHP_SELF"]) . "/index.php";
 	// On redirige vers la page index avec les bons arguments

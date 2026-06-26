@@ -11,6 +11,6 @@ Il y a un historique de pari sur les 3 dernières semaines
 
 Modifier le fichier config.php pour intégrer l'host, le user, le mdp et le nom de la base
 
-Si tout se passe bien, le site devrait se lancer.
+Si tout se passe bien, le site devrait se lancer. Il faut une connnexion internet pour le bon fonctionnement des fonctionnalités
 
 Bonne navigation :)

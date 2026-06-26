@@ -1,11 +1,6 @@
-// ====================================================================
-//  Onglet Météo - appels à l'API OpenWeather avec fetch + Promesses
-//  (réseau en fetch comme dans le TP, affichage avec jQuery comme le
-//   reste du site)
-// ====================================================================
 
 // Clé d'API OpenWeather. REMPLACE-LA par ta propre clé
-// (https://home.openweathermap.org/api_keys).
+
 const apiKey = "a08807a5e6c7223bf1c221f8f87580a4";
 
 // URLs de base des différents services d'OpenWeather
@@ -13,9 +8,7 @@ const currentWeatherAPIUrl = `https://api.openweathermap.org/data/2.5/weather?ap
 const geocodingAPIUrl       = `https://api.openweathermap.org/geo/1.0/direct?appid=${apiKey}`;
 
 
-// --------------------------------------------------------------------
-//  Fonctions utilitaires
-// --------------------------------------------------------------------
+
 
 // Convertit un timestamp Unix (en secondes) + décalage de fuseau (en secondes)
 // en une heure lisible (HH:MM:SS) dans le fuseau du lieu.
@@ -43,9 +36,7 @@ function afficherErreur(message){
 }
 
 
-// --------------------------------------------------------------------
-//  Appels réseau (fetch -> Promesses)
-// --------------------------------------------------------------------
+
 
 // Récupère les conditions météo courantes pour des coordonnées données.
 // Renvoie une promesse résolue avec l'objet JSON renvoyé par l'API.
@@ -58,9 +49,7 @@ function recupererMeteo(latitude, longitude){
 }
 
 
-// --------------------------------------------------------------------
-//  Affichage de TOUTES les infos renvoyées par l'API
-// --------------------------------------------------------------------
+
 function afficherDonnees(data, nomLieu){
     $("#weather-message").empty().removeClass("error success");
     var result = $("#weather-result");
@@ -138,10 +127,6 @@ function afficherDonnees(data, nomLieu){
     }
 }
 
-
-// --------------------------------------------------------------------
-//  Jours précédents (vraies données passées) : tableau + graphiques
-// --------------------------------------------------------------------
 
 // Traduit un code météo WMO (Open-Meteo) en description française
 function codeMeteoFr(code){
@@ -284,9 +269,6 @@ function tracerGraphiques(box, labels, tMin, tMax, precip){
 }
 
 
-// --------------------------------------------------------------------
-//  Scénarios d'utilisation
-// --------------------------------------------------------------------
 
 // Météo à partir d'un nom de ville (géocodage direct puis météo)
 function afficherMeteoParVille(ville){
@@ -310,9 +292,7 @@ function afficherMeteoParVille(ville){
 }
 
 
-// --------------------------------------------------------------------
-//  Suggestions de villes (recherche pendant la frappe)
-// --------------------------------------------------------------------
+
 var villeSearchTimeout = null;
 
 // Construit un libellé lisible pour une ville renvoyée par le géocodage
@@ -359,9 +339,6 @@ function rechercherVilles(terme){
 }
 
 
-// --------------------------------------------------------------------
-//  Initialisation
-// --------------------------------------------------------------------
 $(document).ready(function(){
 
     $("#weather-search-btn").click(function(){

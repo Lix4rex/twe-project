@@ -1,6 +1,4 @@
-/* ==========================================================================
-   MODULE : CALENDRIERS PARTAGÉS (STRUCTURE ASYMÉTRIQUE 20% - 80%)
-   ========================================================================== */
+
 #calendar_main_box {
     display: flex;
     flex-direction: row;
@@ -20,7 +18,7 @@
     padding-left: 10px;
 }
 
-/* --- SIDEBAR GAUCHE (20%) --- */
+/* --- SIDEBAR GAUCHE  --- */
 #calendar-sidebar {
     flex: 0 0 20%;
     min-width: 240px;
@@ -84,7 +82,7 @@
     margin: 40px 0;
 }
 
-/* --- ZONE CALENDRIER DROITE (80%) --- */
+/* --- ZONE CALENDRIER DROITE --- */
 #calendar-box-wrapper {
     flex: 0 0 80%;
     box-sizing: border-box;
@@ -139,7 +137,7 @@
     width: 100%;
 }
 
-/* --- LA GRILLE DE 7 COLONNES ALIGNÉES EN DESSOUS --- */
+
 .calendar-grid {
     display: flex;
     flex-direction: row; 
